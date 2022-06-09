@@ -1,0 +1,315 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+    <title>Starting Widget</title>
+    <script src="starting.js"></script>
+    <script type="text/javascript" src="./lib/handlebars.js"></script>
+    <script type="text/javascript" src="https://live.zwidgets.com/js-sdk/1.0.6/ZohoEmbededAppSDK.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            ZOHO.embeddedApp.init().then(function () {
+                console.log("hi");
+                ZOHO.CRM.UI.Resize({ height: "700", width: "850" }).then(function (data) {
+                    console.log(data);
+                });
+                document.getElementById('clientPortal').style.display = "none";
+                document.getElementById('zylker').style.display = "none";
+                document.getElementById('twilio').style.display = "none";
+                fetchDataFromOrg();
+            });
+        });
+    </script>
+</head>
+
+<body style="background-color: #EBF5FB;">
+    <div class="modal fade" id="sucessUpdate" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" style="left: 20%;
+                    position: relative;" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title" id="updateDowngrade" style="text-align: center;
+                    right: 37%;
+                    position: relative;"></h4>
+                </div>
+                <div class="modal-body" style="min-height: 100px;">
+                    <div class="centerDiv">
+                        <img class="stylesImg" id="Success_tick" src="./image/TickGreen.gif" alt="success">
+                    </div>
+                    <div style="margin-top: 10px;">
+                        <p style="text-align: center;
+                        font-weight: bold;
+                        top: 40px;
+                        position: relative;" id="sucessAndFailureResponse"></p>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btnStyle" id="okBtn" data-dismiss="modal">Ok</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div>
+        <button type="button" class="btn btn-danger" data-toggle="modal" id="btnTrigger" data-target="#sucessUpdate"
+            data-backdrop="false"></button>
+    </div>
+    <div class="Container-fluid">
+        <div id="home">
+            <div class="row marginTop">
+                <div class="col-md-2 col-2"></div>
+                <div class="col-md-8 col-8">
+                    <h3 class="centerTag textStyle">Welcome to Realestate Application </h3>
+                    <p class="centerTag ">Please Configure the below integrations</p>
+                </div>
+                <div class="col-md-2 col-2">
+                    <img style="left:15%;position:relative; cursor: pointer;" src="./image/close.svg" alt="close"
+                        onclick="closing()">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 col-12">
+                    <div class="box">
+                        <div style="display: flex;">
+                            <div class="row" style="width: 100%;">
+                                <div class="col-md-2" style="left: 30px;"><img src="./image/zylker.png"
+                                        class="zylkerLogo" alt="zylker image"></div>
+                                <div class="col-md-8">
+                                    <p class="pTag">Zylker Provides a marketplace for the Real Estate Property Data.</p>
+                                </div>
+                                <div class="col-md-2"><button class="btn btn-primary btnsize styles"
+                                        onclick="enableZylker()">Configure</button></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="box">
+                        <div style="display: flex;">
+                            <div class="row" style="width: 100%;">
+                                <div class="col-md-2" style="left: 30px;"><img src="./image/twilio.png"
+                                        class="zylkerLogo" alt="twilio image"></div>
+                                <div class="col-md-8">
+                                    <p class="pTag">You can send SMS text to your leads and contacts through twilio.</p>
+                                </div>
+                                <div class="col-md-2"><button class="btn btn-primary btnsize styles"
+                                        onclick="enableTwilio()">Configure</button></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="box">
+                        <div style="display: flex;">
+                            <div class="row" style="width: 100%;">
+                                <div class="col-md-2" style="left: 30px;"><img src="./image/zoho-sign.png"
+                                        class="zylkerLogo" alt="twilio image"></div>
+                                <div class="col-md-8">
+                                    <p class="pTag">You can upload the property Doc, images etc to get the sign from the
+                                        Buyer.</p>
+                                </div>
+                                <div class="col-md-2"><button class="btn btn-primary btnsize styles"
+                                        onclick="authorize()" id="signBtn"></button></div>
+                            </div>
+
+
+                        </div>
+                    </div>
+                    <div class="box">
+                        <div style="display: flex;">
+                            <div class="row" style="width: 100%;">
+                                <div class="col-md-2" style="left: 30px;"><img src="./image/clientPortal.webp"
+                                        class="zylkerLogo" alt="twilio image"></div>
+                                <div class="col-md-8">
+                                    <p class="pTag">You can choose the name of your client portal name.</p>
+                                </div>
+                                <div class="col-md-2"><button class="btn btn-primary btnsize styles"
+                                        onclick="updateClientName()">Configure</button></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="margin-top: 12px;">
+                <div class="col-md-4"></div>
+                <div class="col-md-4"></div>
+                <div class="col-md-4">
+                    <a href="" onclick="dontShowAgain()"> Don't show it again.</a>
+                </div>
+            </div>
+        </div>
+
+        <div id="clientPortal" class="row" style="margin-top: 20px;">
+            <div class="col-md-12">
+                <p style="font-weight: 700;font-size: 17px;top: 2px;position: absolute;cursor: pointer;"
+                    onclick="back()">
+                    Back </p>
+                <h3 class="centerTag textStyle">Client Portal</h3>
+                <div class="borderBox"
+                    style="margin-top: 5%;background-color: white;box-shadow: rgb(0 0 0 / 24%) 0px 3px 8px;">
+                    <div class="row" id="isClientAuthorized">
+                        <div class="col-md-12 centerBtn" style="min-height: 100px;">
+                            <p style="font-weight: 600;text-align:center;">Kindly authorize the connector before
+                                proceeding with the Client portal Name change.</p>
+                            <button class="btnStyle" style="left: 20px;position: relative;" onclick="authorizeClient()"
+                                id="clientBtnAuth"></button>
+                        </div>
+                    </div>
+                    <div id="ClientNameChange">
+
+                        <div class="row" style="display: flex;left: -35px;margin-top: 5%;position: relative;">
+                            <div class="col-md-5">
+                                <p style="text-align: center;padding: 10px;font-weight: 600;">Client Portal Name</p>
+                            </div>
+                            <div class="col-md-7">
+                                <input type="text" id="clientName" class="inputStyle">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="centerBtn" style="margin-top: 5%;margin-bottom: 5%;">
+                                    <button class="btnStyle" onclick="onClientSave()">Save</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="margin-top: 50px;">
+                    <div class="col-12">
+                        <h6 style="font-weight: 600;padding:10px;">Support</h6>
+                        <div class="box" style="border-left: 5px solid #808B96;">
+                            <p style="text-align: center;top: 23px;position: relative;">If you have questions
+                                about how to use any part of the software, or feedback on other features you'd
+                                like to see, you can email us at <a class="clar" href="#"> support@zohodeveloper.com</a>
+                                We
+                                hope you enjoy using Realestate Application and look forward to
+                                helping you manage your coaching as easily as possible.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="zylker" class="row" style="margin-top: 20px;">
+            <div class="col-md-12">
+                <p style="font-weight: 700;font-size: 17px;top: 2px;position: absolute;cursor: pointer;"
+                    onclick="back()">
+                    Back </p>
+                <h3 class="centerTag textStyle">Zylker Listing Portal</h3>
+                <div class="borderBox"
+                    style="margin-top: 5%;background-color: white;box-shadow: rgb(0 0 0 / 24%) 0px 3px 8px;">
+                    <div class="row" style="display: flex;left: -35px;margin-top: 4%;position: relative;">
+                        <div class="col-md-5">
+                            <p style="text-align: center;padding: 10px;font-weight: 600;">Zylker Access Token
+                            </p>
+                        </div>
+                        <div class="col-md-7">
+                            <input type="text" id="ZylkerAccessToken" class="inputStyle">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="" style="margin-bottom: 2%;float: right;padding-right: 35px;">
+                                <button class="btnNonActive" style="margin-right: 25px;"> <a
+                                    style="color: #3498DB!important;" id="accessZylkerApp" href=""
+                                    onclick="accessZylkerApp()" target="_blank">Access Zylker MLS</a></button>
+                                <button class="btnStyle" onclick="onZylkerSave()">Save</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="margin-top: 50px;">
+                    <div class="col-12">
+                        <h6 style="font-weight: 600;padding:10px;">Support</h6>
+                        <div class="box" style="border-left: 5px solid #808B96;">
+                            <p style="text-align: center;top: 23px;position: relative;">If you have questions
+                                about how to use any part of the software, or feedback on other features you'd
+                                like to see, you can email us at <a class="clar" href="#"> support@zohodeveloper.com</a>
+                                We
+                                hope you enjoy using Realestate Application and look forward to
+                                helping you manage your coaching as easily as possible.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="twilio" class="row" style="margin-top: 20px;">
+            <div class="col-md-12">
+                <p style="font-weight: 700;font-size: 17px;top: 2px;position: absolute;cursor: pointer;"
+                    onclick="back()">
+                    Back </p>
+                <h3 class="centerTag textStyle">Twilio</h3>
+                <div class="borderBox"
+                    style="margin-top: 5%;margin-top: 5%;background-color: white;box-shadow: rgb(0 0 0 / 24%) 0px 3px 8px;">
+                    <div class="row" style="display: flex;left: -35px;margin-top:5%;position: relative;">
+                        <div class="col-md-5">
+                            <p style="text-align: center;padding: 10px;font-weight: 600;">Twilio Account SID</p>
+                        </div>
+                        <div class="col-md-7">
+                            <input type="text" id="twilioSID" class="inputStyle">
+                        </div>
+                    </div>
+                    <div class="row" style="display: flex;left: -35px;position: relative;">
+                        <div class="col-md-5">
+                            <p style="text-align: center;padding: 10px;font-weight: 600;">Twilio AuthToken</p>
+                        </div>
+                        <div class="col-md-7">
+                            <input type="text" id="twilioAuth" class="inputStyle">
+                        </div>
+                    </div>
+                    <div class="row" style="display: flex;left: -35px;position: relative;">
+                        <div class="col-md-5">
+                            <p style="text-align: center;padding: 10px;font-weight: 600;">Twilio Mobile Number
+                            </p>
+                        </div>
+                        <div class="col-md-7">
+                            <input type="text" id="twilioNumber" class="inputStyle">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="" style="margin-bottom: 2%;float: right;padding-right: 35px;">
+                                <button class="btnNonActive" style="margin-right: 25px;"> <a
+                                        style="color: #3498DB!important;" id="twilioCredential" href=""
+                                        onclick="twilioCredentials()" target="_blank">Get Twilio
+                                        Credentials</a></button>
+                                <button class="btnNonActive" style="margin-right: 20px;"> <a
+                                        style="color: #3498DB!important;" id="noAccount" href="" onclick="noAccTwilio()"
+                                        target="_blank">No Account? Register with Twilio</a></button>
+                                <button class="btnStyle" onclick="twilioSave()">Save</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="margin-top: 50px;">
+                    <div class="col-12">
+                        <h6 style="font-weight: 600;padding:10px;">Support</h6>
+                        <div class="box" style="border-left: 5px solid #808B96;">
+                            <p style="text-align: center;top: 23px;position: relative;">If you have questions
+                                about how to use any part of the software, or feedback on other features you'd
+                                like to see, you can email us at <a class="clar" href="#"> support@zohodeveloper.com</a>
+                                We
+                                hope you enjoy using Realestate Application and look forward to
+                                helping you manage your coaching as easily as possible.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

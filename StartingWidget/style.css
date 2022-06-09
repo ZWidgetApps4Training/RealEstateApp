@@ -1,0 +1,112 @@
+.centerTag {
+    text-align: center;
+}
+
+.textStyle{
+    color: black;
+    font-weight: 600;
+}
+
+.marginTop{
+    margin-top: 20px;
+}
+
+.box{
+    width: 90%;
+    height: 120px;
+    background-color: #F7F9F9;
+     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px; 
+    margin-top: 20px;
+    left: 5%;
+    position: relative;
+}
+
+
+.btnsize{
+    width: 105px;
+    height: 40px;
+}
+
+.zylkerLogo{
+    width: 80px;
+    height: 60px;
+    padding: 10px;
+    top: 35px;
+    position: relative;
+}
+
+.pTag{
+    top: 50px;
+    position: relative;
+    font-weight: 600;
+    padding-left: 25px;
+}
+
+.styles{
+    top: 20px;
+    position: relative;
+    margin-top: 20px;
+    
+    font-weight: 700;
+}
+
+.inputStyle{
+    height: 40px;
+    width: 100%;
+    border: 2px solid lightgray;
+    padding-left: 10px;
+}
+
+.centerBtn{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.borderBox{
+    border: 1px solid lightgray;
+}
+
+.btn-primary {
+    color: #fff;
+    background-color: #42a2eb !important;
+    border-color: #42a2eb !important;
+}
+
+.btnNonActive{
+    min-width: 100px;
+  height: 50px;
+  background-color: white;
+  color: #3498DB;
+  font-weight: bold;
+  border: 2px solid #3498DB;
+  outline: none;
+  cursor: pointer;
+}
+
+.btnStyle{
+    min-width: 100px;
+    height: 50px;
+    background-color: #3498DB;
+    color: #FDFEFE;
+    font-weight: bold;
+    border: none;
+    outline: none;
+    cursor: pointer;
+}
+
+.centerDiv {
+    position: absolute;
+    top: 100%;
+    left: 60%;
+    margin: -100px 0 0 -100px;
+}
+
+.stylesImg{
+    width: 80px;
+    height: 80px;
+  }
+  
+  #btnTrigger{
+    display: none;
+  }

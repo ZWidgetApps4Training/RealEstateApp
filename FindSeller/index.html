@@ -1,0 +1,161 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+    <title>Find Seller</title>
+    <script src="findSeller.js"></script>
+    <script type="text/javascript" src="./lib/handlebars.js"></script>
+    <script type="text/javascript" src="https://live.zwidgets.com/js-sdk/1.1/ZohoEmbededAppSDK.min.js"></script>
+    <script>
+        $(document).ready(function () {   
+            ZOHO.embeddedApp.on("PageLoad", function (datas) {
+                console.log("hiiiii");
+                pageloadInfo.pageLoadData = datas;
+                console.log(pageloadInfo.pageLoadData);
+            })
+            ZOHO.embeddedApp.init().then(function () {
+                console.log("hi");
+                 fetchJson();
+            });
+        });
+    </script>
+</head>
+
+<body>
+    <div class="modal fade" id="sucessUpdate" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" style="left: 20%;
+                    position: relative;" class="close" onclick="closeBtn()" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title" id="updateDowngrade" style="text-align: center;
+                    right: 37%;
+                    position: relative;"></h4>
+                </div>
+                <div class="modal-body" style="min-height: 100px;">
+                    <div class="centerDiv">
+                        <img class="stylesImg" id="Success_tick"
+                            src="./image/TickGreen.gif"
+                            alt="success">
+                    </div>
+                    <div style="margin-top: 20px;">
+                        <p style="text-align: center;
+                        font-weight: bold;
+                        top: 40px;
+                        position: relative;" id="sucessAndFailureResponse"></p>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btnStyle" onclick="okay()" id="okBtn" data-dismiss="modal">Ok</button>
+                    <div class="loading-container" id="secLoader">
+                        <div class="loading"></div>
+                        <div id="loading-text"></div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="propertyInfo" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" style="left:20%;
+                    position: relative;" class="close" onclick="closing()" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title" id="PropertyInfoHeading" style="text-align: center;
+                    right: 30%;
+                    position: relative;"></h4>
+                </div>
+                <div class="row">
+                    <div class="col-12 col-md-12" id="propertyImg">
+                    </div>
+                </div>
+                <div class="modal-body" style="min-height: 100px;">
+                    <table class="table table-hover table-bordered">
+                        <thead id="selectedHead">
+                        </thead>
+                        <tbody id="selectedBody">
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btnStyleNotActive" onclick="closing();" id="okBtn" data-dismiss="modal">Ok</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="Container-fluid" id="container">
+        <div class="notify"><span id="notifyType" style="top: 10px;
+            position: relative;"></span></div>
+        <div class="row">
+            <div class="col-12" style="margin-top: 10px;">
+                <h2 class="headingStyle" style="margin-top: 30px;">Find Properties</h2>
+                <p style="color: #5DADE2;text-align: center;font-weight: 700;">Search property based on your need.</p>
+            </div>
+        </div>
+        <div class="row" style="margin-top: 30px;">
+            <div class="col-12">
+                    <div class="row" id="listCheckBox">
+                    </div>
+                    <div class="centerBtn" style="margin-bottom: 15px;">
+                        <button class="btnStyleNotActive" id="searchProp" onclick="search()" > Search property</button>
+                    </div>
+            </div>
+        </div>
+        <div id="loadings" class="centerLoader">
+            <img src="https://flevix.com/wp-content/uploads/2019/07/Bar-Preloader-1.gif" alt="loading" style="width: 300px;height:300px;">
+        </div>
+        <div>
+            <button type="button" class="btn btn-danger" data-toggle="modal" id="btnTrigger"
+                data-target="#sucessUpdate" data-backdrop="false"></button>
+                <button type="button" class="btn btn-danger" data-toggle="modal" id="propertyInfoTrigger"
+                data-target="#propertyInfo" data-backdrop="false"></button>
+        </div>
+    
+        <div class="row">
+            <div class="col-12">
+                <table class="table table-hover table-bordered">
+                    <thead id="propertiesHead">
+                    </thead>
+                    <tbody id="propertiesBody">
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-md-12" id="noPropertyMatch">
+                <p style="text-align:center; color:gray;">No Properties has been matched with your search criteria, Kindly alter the search criteria or click "Try in zylker"</p>
+            </div>
+            <div class="col-12">
+                <div class="row" style="margin-bottom: 20px;">
+                    <div class="col-3"></div>
+                    <div class="col-3">
+                        <button style="float: right;" class="btnStyleNotActive" onclick="saveBtn()"> Save</button>
+                    </div>
+                    <div class="col-3">
+                        <button class="btnStyle" id="zylkerBtn" onclick="tryInZillow();">Try in Zylker</button>
+                    </div>
+                    <div class="col-3"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

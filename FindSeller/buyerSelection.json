@@ -1,0 +1,37 @@
+[
+    {
+        "name": "Locality",
+        "apiName": "Locality",
+        "variableName" : "Locality"
+    },
+    {
+        "name": "City",
+        "apiName": "City",
+        "variableName" : "city"
+
+    },
+    {
+        "name": "Rate Per Sqft",
+        "apiName": "Rate_Per_Sqft",
+        "variableName" : "rate_per_sqft"
+
+    },
+    {
+        "name": "No of Bedrooms",
+        "apiName": "Number_of_Bedrooms",
+        "variableName" : "Bedrooms"
+
+    },
+    {
+        "name": "No of Bathrooms",
+        "apiName": "Number_of_Bathrooms",
+        "variableName" : "Bathrooms"
+
+    },
+    {
+        "name": "Property Type",
+        "apiName": "Property_Type",
+        "variableName" : "Property_Interested_In"
+
+    }
+]
