@@ -1,0 +1,64 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+        <link rel = "icon" href ="./images/icon2.webp" type = "image/x-icon">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+    <title>Zyler Listing Service</title>
+    <script src="zyler.js"></script>
+</head>
+<body style="background-color:#EBF5FB ;">
+    <nav class="navbar navbar-expand-sm primarys navbar-dark">
+        <!-- Brand/logo -->
+        <a class="navbar-brand" href="https://therealestate-710385233.development.catalystserverless.com/app/ZylerApp/index.html">
+            <img src="./images/logo.png" alt="Logo" style="width:40px;">
+        </a>
+        <h2 style="text-align: center;left: 40%;position: relative; color: black;font-weight: 700;">ZYLKER
+        </h2>
+        <!-- Links -->
+        <ul class="navbar-nav " style="left: 70%;
+        position: relative;" >
+          <li class="nav-item" style="width: 90px;">
+            <a class="nav-link" style="color: black;font-size: 20px;font-weight: 700;" href="https://therealestate-710385233.development.catalystserverless.com/app/ZylerApp/Buyer/buyer.html?isRedirectFromCrm=false&PropName=">BUY</a>
+          </li>
+          <li class="nav-item" style="width: 90px;">
+            <a class="nav-link" style="color: black;font-size: 20px;font-weight: 700;" href="https://therealestate-710385233.development.catalystserverless.com/app/ZylerApp/SellerContact/seller.html">SELL</a>
+          </li>
+          <li class="nav-item" style="width: 90px;">
+            <a class="nav-link" style="color: black;font-size: 20px;font-weight: 700;" href="#">RENT</a>
+          </li>
+        </ul>
+      </nav>
+
+
+    <div class="Container-fluid">
+        <div class="row" id="homePage">
+            <div class="col-12 col-md-12" style="position:relative ;">
+                 <h1 class="displayMsg">Buy / Sell your home with confidence</h1>
+                 <h2 class="smallDisplay">Zyler is making it simpler to sell your home and move forward.</h2> 
+
+                 <div class="btnDisplayStyle">
+                     <button class="btnStyle" onclick="buyer()">Buyer</button>
+                     <button class="btnStyleNotActive" onclick="seller()">Seller</button>
+                 </div>
+                <img src="https://www.zillowstatic.com/s3/seller-info/static/Hero_Sell_Large.png" alt="mainpage" style="width: 100%;height: 600px;">
+            </div>
+        </div>
+
+       
+    </div>
+</body>
+</html>

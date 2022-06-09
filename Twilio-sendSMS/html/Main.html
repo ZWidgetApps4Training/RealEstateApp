@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=0.1">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+    <script type="text/javascript" src="../lib/jquery-1.11.1.min.js"></script>
+    <script type="text/javascript" src="../lib/handlebars.js"></script>
+    <!-- <script type="text/javascript" src="../lib/ZohoEmbededAppSDK.min.js"></script> -->
+    <script type="text/javascript" src="https://live.zwidgets.com/js-sdk/1.1/ZohoEmbededAppSDK.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            var AuthToken;
+            var accSid;
+            var mobNum;
+            var mob;
+            var recId;
+            var pageloadInfo = {};
+            var msgTemplateList;
+            $("div#TryInZillow").hide();
+            ZOHO.embeddedApp.on("PageLoad", function (datas) {
+                console.log("hiiiii");
+                pageloadInfo.pageLoadData = datas;
+                console.log(pageloadInfo.pageLoadData);
+            });
+
+            ZOHO.embeddedApp.init().then(function () {
+                setTimeout(() => {
+                    getInfo();
+                }, 2000);
+            });
+
+            function getInfo() {
+                var getId = pageloadInfo.pageLoadData['EntityId'][0];
+                ZOHO.CRM.API.getRecord({ Entity: pageloadInfo.pageLoadData.Entity, RecordID: getId })
+                    .then(function (data) {
+                        console.log(data.data);
+                        var Mobile_Number = data.data[0]["Mobile"];
+                        var fullName = data.data[0]["Full_Name"];
+                        var record_id = data.data[0]["id"];
+                        recId = record_id;
+                        mob = Mobile_Number;
+                        $("#mobileId").html(Mobile_Number);
+                        $("#fullNameId").html(fullName);
+                        $("#mobileId1").html(Mobile_Number);
+                        $("#fullNameId1").html(fullName);
+                        ZOHO.CRM.API.getOrgVariable("therealestate__Twilio_AuthToken")
+                            .then(function (data) {
+                                var newOrg = (data.Success);
+                                var Twilio_AuthToken = newOrg.Content;
+                                AuthToken = Twilio_AuthToken;
+                            });
+                        ZOHO.CRM.API.getOrgVariable("therealestate__Twilio_Account_SID")
+                            .then(function (data) {
+                                var newOrg = (data.Success);
+                                var Twilio_Account_SID = newOrg.Content;
+                                accSid = Twilio_Account_SID;
+                            });
+                        ZOHO.CRM.API.getOrgVariable("therealestate__Twilio_Mobile_Number")
+                            .then(function (data) {
+                                var newOrg = (data.Success);
+                                var Twilio_Mobile_Number = newOrg.Content;
+                                mobNum = Twilio_Mobile_Number;
+                            });
+                    });
+
+                ZOHO.CRM.API.getAllRecords({ Entity: "SMS_Templates" })
+                    .then(function (data) {
+                        console.log(data);
+                        msgTemplateList = data.data;
+                        for (i = 0; i < msgTemplateList.length; i++) {
+                            $("#namesList").append("<option value=" + i + ">" + msgTemplateList[i].Name + "</option>")
+                            document.getElementById('templateBody').innerHTML = msgTemplateList[0].SMS_Message;
+                        }
+                        $('select').each(function () {
+                            var $this = $(this), numberOfOptions = $(this).children('option').length;
+                            $this.addClass('select-hidden');
+                            $this.wrap('<div class="select"></div>');
+                            $this.after('<div class="select-styled"></div>');
+                            var $styledSelect = $this.next('div.select-styled');
+                            $styledSelect.text($this.children('option').eq(0).text());
+                            var $list = $('<ul />', {
+                                'class': 'select-options'
+                            }).insertAfter($styledSelect);
+                            for (var i = 0; i < numberOfOptions; i++) {
+                                $('<li />', {
+                                    text: $this.children('option').eq(i).text(),
+                                    rel: $this.children('option').eq(i).val()
+                                }).appendTo($list);
+                            }
+                            var $listItems = $list.children('li');
+                            $styledSelect.click(function (e) {
+                                e.stopPropagation();
+                                $('div.select-styled.active').not(this).each(function () {
+                                    $(this).removeClass('active').next('ul.select-options').hide();
+                                });
+                                $(this).toggleClass('active').next('ul.select-options').toggle();
+                            });
+                            $listItems.click(function (e) {
+                                e.stopPropagation();
+                                $styledSelect.text($(this).text()).removeClass('active');
+                                $this.val($(this).attr('rel'));
+                                $list.hide();
+                                onselect();
+                            });
+                            $(document).click(function () {
+                                $styledSelect.removeClass('active');
+                                $list.hide();
+                            });
+                        });
+                    });
+            }
+
+            $("#submit1").click(function () {
+                var msgContent = $("input[name='Message Content']").val().trim();
+                var numContent = mob;
+                if (msgContent == "" || numContent == "") {
+                    $('.success').slideDown(function () {
+                        $('.success').delay(3000).slideUp();
+                    });
+                }
+                else {
+                    var newVar = accSid + ":" + AuthToken;
+                    console.log(accSid, 'accsid');
+                    console.log(AuthToken, 'AuthToken');
+                    baseEncoded = btoa(newVar);
+                    var encode = baseEncoded.replace('\n', '');
+                    $.ajax({
+                        url: "https://api.twilio.com/2010-04-01/Accounts/" + accSid + "/Messages.json",
+                        type: 'POST',
+                        dataType: "json",
+                        headers: { "Authorization": "Basic " + encode },
+                        data: { "To": mob, "From": mobNum, "Body": msgContent },
+                        success: function (data) {
+                            $('.success1').slideDown(function () {
+                                $('.success1').delay(2000).slideUp();
+                            });
+                            ZOHO.CRM.API.addNotes({ Entity: "Contacts", RecordID: recId, Title: "Message Sent", Content: msgContent })
+                                .then(function (data) {
+                                    ZOHO.CRM.UI.Popup.closeReload();
+                                });
+
+                        }
+                    });
+                }
+            });
+
+            $("#submit5").click(function () {
+                $("#namesList>option").each(function () {
+                    if ($(this).is(':selected')) {
+                        console.log(this);
+                        console.log($(this).val());
+                        console.log(this);
+                        var msgTemp = msgTemplateList[$(this).val()];
+                        console.log(JSON.stringify(msgTemp));
+                        var msgContent = msgTemp['SMS_Message'];
+                        console.log(msgContent);
+                        var newVar = accSid + ":" + AuthToken;
+                        baseEncoded = btoa(newVar);
+                        var encode = baseEncoded.replace('\n', '');
+                        $.ajax({
+                            url: "https://api.twilio.com/2010-04-01/Accounts/" + accSid + "/Messages.json",
+                            type: 'POST',
+                            dataType: "json",
+                            headers: { "Authorization": "Basic " + encode },
+                            data: { "To": mob, "From": mobNum, "Body": msgContent },
+                            success: function (data) {
+                                console.log(data)
+                                $('.success1').slideDown(function () {
+                                    $('.success1').delay(2000).slideUp();
+                                });
+                                ZOHO.CRM.API.addNotes({ Entity: "Contacts", RecordID: recId, Title: "Message Sent", Content: msgContent })
+                                    .then(function (data) {
+                                        ZOHO.CRM.UI.Popup.closeReload();
+                                    });
+                            }
+                        });
+                    }
+
+                });
+            });
+
+            function onselect() {
+                $("#namesList>option").each(function () {
+                    if ($(this).is(':selected')) {
+                        console.log(this);
+                        console.log($(this).val());
+                        document.getElementById('templateBody').innerHTML = msgTemplateList[$(this).val()]['SMS_Message'];
+                    }
+                })
+            }
+
+            $("#submit2").click(function () {
+                ZOHO.CRM.UI.Popup.closeReload();
+            });
+            $("#submit3").click(function () {
+                $("div#MatchNotFound").hide();
+                $("div#TryInZillow").show();
+            });
+            $("#submit4").click(function () {
+                $("div#MatchNotFound").show();
+                $("div#TryInZillow").hide();
+            });
+        });
+
+    </script>
+</head>
+
+<body>
+    <div class="success" style="display: none;"> <b>Please enter a valid message and submit the form </b></div>
+    <div class="success1" style="display: none;"> <b>Message Sent Successfull </b></div>
+    <div class="BG" id="MatchNotFound">
+        <div class="popualbg">
+            <div style="justify-content: center;display: flex;align-items: center;">
+                <img src="../Image/twilio.png" alt="twilio Img" style="width: 70px;height: 70px;">
+            </div>
+            <ul>
+                <li>
+                    <span class="section" style="width:100%;text-align: center;"><span class="Text">Send
+                            SMS</span></span>
+                </li>
+            </ul>
+
+            <div class="fld">
+                <label class="fldText">Contact Name :</label><span id="fullNameId" class="vleText"> Loading ... </span>
+            </div>
+
+            <div class="fld">
+                <label class="fldText">Mobile :</label><span id="mobileId" class="vleText" name="mobileId"> Loading ...
+                </span>
+            </div>
+
+
+            <div class="Point clearfix">
+                <label class="text">Message Content :</label>
+                <input class="textbox" type="text" name="Message Content" value="">
+            </div>
+
+            <div class="btnbg">
+                <span class="btn bluebtn" id="submit3">Select Template</span>
+                <span class="btn bluebtn" style="margin-right:15px;" id="submit1">Send SMS</span>
+                <span class="btn cancelbtn" id="submit2">Cancel</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="BG" id="TryInZillow">
+        <div class="popualbg">
+            <ul>
+                <li>
+                    <span class="section" style="width:100%;"><span class="Text">Message Templates</span></span>
+                </li>
+            </ul>
+
+            <div class="fld">
+                <label class="fldText">Contact Name :</label><span id="fullNameId1" class="vleText"> Loading ... </span>
+            </div>
+
+            <div class="fld">
+                <label class="fldText">Mobile :</label><span id="mobileId1" class="vleText"> Loading ... </span>
+            </div>
+
+
+            <table width="100%" cellpadding="0" cellspacing="0" border="0" class="mT20">
+                <tr>
+                    <td class="bdr messagebg">
+                        <div style="margin-top: 7px;">Message Template :</div>
+                    </td>
+                    <td class="bdr messBG">
+                        <select id="namesList" onchange="onselect()">
+                        </select>
+                    </td>
+                </tr>
+            </table>
+
+            <div class="fld">
+                <label class="fldText" style="top: -25px;position: relative;">Message Body :</label><textarea
+                    id="templateBody" style="width: 50%;display: inline-block;font-size: 16px;color: #111;height: 60px;"
+                    placeholder="Loading...">
+                </textarea>
+            </div>
+
+            <div class="btnbg">
+                <span class="btn bluebtn" id="submit5">Send SMS</span>
+                <span class="btn cancelbtn" id="submit4">Back</span>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>

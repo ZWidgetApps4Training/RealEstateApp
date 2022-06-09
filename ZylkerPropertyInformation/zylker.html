@@ -1,0 +1,125 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="zylker.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <title>Zylker Property Information</title>
+    <script src="zylker.js"></script>
+    <script defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBvUcXXFcuVJt7Xey9-wWQTDTFkI5IhX90&callback=initMap">
+        </script>
+    <script type="text/javascript" src="./lib/handlebars.js"></script>
+    <script type="text/javascript" src="https://live.zwidgets.com/js-sdk/1.1/ZohoEmbededAppSDK.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            ZOHO.embeddedApp.on("PageLoad", function (datas) {
+                console.log("in pageload");
+                pageloadInfo.pageLoadData = datas;
+                console.log(pageloadInfo.pageLoadData);
+                getZillowPropertyDetails();
+            })
+            ZOHO.embeddedApp.init().then(function () {
+                console.log("init");
+            });
+
+        });
+    </script>
+    <style>
+        #map {
+            height: 400px;
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="Container-fluid">
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-12">
+                <ul class="nav nav-tabs">
+                    <li class="active"><a data-toggle="tab" href="#propertyDetails">Property Details</a></li>
+                    <li><a data-toggle="tab" href="#Zestimate">Zestimate</a></li>
+                    <li><a data-toggle="tab" href="#fatcsFeatures">Facts & Features</a></li>
+                    <li><a data-toggle="tab" href="#similarProperties">Similar Properties</a></li> 
+                    <li><a data-toggle="tab" href="#map" onclick="map();">Map</a></li> 
+                    <a id="viewProperty" style="float: right;padding: 10px;font-weight: 600;" href="" onclick="here()" target="_blank">view in zylker</a>
+                </ul>
+
+                
+                <div class="tab-content">
+                    <div id="propertyDetails" class="tab-pane fade in active">
+                        <div class="row">
+                            <div class="col-md-12"> <h3 class="headingStyle" style="text-align: center;color: black !important;">Property Details</h3></div>
+                            <div class="col-md-6" style="padding-top: 30px;">
+                                <div>
+                                    <h3 id="propertyAmt" style="color: #3498DB!important;font-weight: 700;"></h3>
+                                    <span style="display:flex;">
+                                        <p class="headingStyle">Property Name</p>
+                                        <p id="propertyName" style="font-weight: 700;padding-left: 15px;"></p>
+                                    </span>
+                                    <span style="display:flex;">
+                                        <p class="headingStyle">No of Bedrooms :</p>
+                                        <p id="bedrooms" style="font-weight: 700;padding-left: 15px;"></p>
+                                    </span>
+
+                                    <span style="display:flex;">
+                                        <p class="headingStyle">No of Bathrooms :</p>
+                                        <p id="bathrooms" style="font-weight: 700;padding-left: 15px;"></p>
+                                    </span>
+
+                                    <span style="display:flex;">
+                                        <p class="headingStyle">Property Status :</p>
+                                        <p id="propertyStatus" style="font-weight: 700;padding-left: 15px;"> </p>
+                                    </span>
+
+                                    <span style="display:flex;">
+                                        <p class="headingStyle">No of Sqft :</p>
+                                        <p id="sqrFt" style="font-weight: 700;padding-left: 15px;">&#160;&#160; </p>
+                                    </span>
+
+                                    <span style="display:flex;">
+                                        <p class="headingStyle">Address:</p>
+                                        <p id="address" style="text-align: center;font-weight: 700;padding-left: 15px;">
+                                            &#160;&#160;</p>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div id="propertyImg">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="Zestimate" class="tab-pane fade">
+                        <img src="./estimate-removebg-preview.png" alt="estimate">
+                    </div>
+                    <div id="fatcsFeatures" class="tab-pane fade">
+                    </div>
+                    <div id="similarProperties" class="tab-pane fade">
+                        <div class="row">
+                            <div class="col-md-2"></div>
+                            <div class="col-md-8" id="similarProp"></div>
+                            <div class="col-md-2"></div>
+                        </div>
+                    </div>
+                    <div id="map" class="tab-pane fade">
+                        <div id="map"></div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

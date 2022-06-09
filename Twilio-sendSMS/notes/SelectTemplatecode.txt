@@ -1,0 +1,173 @@
+
+<!---- Headers ----->
+
+
+         <!-- JS Library Starts -->
+
+        <script type="text/javascript" src="../lib/jquery-1.11.1.min.js"></script>
+        <script type="text/javascript" src="../lib/handlebars.js"></script> 
+        <script type="text/javascript" src="../lib/ZohoEmbededAppSDK.min.js"></script> 
+
+        <!-- JS Library Ends -->
+
+        <!-- Your JS Functions --> <script type="text/javascript" src="../js/code.js"></script>    
+
+<!---- Headers ----->
+
+
+<!---- Body Starts Here ----->
+
+<!-- Success and Failure Alerts         -->
+        <div class="success" style="display: none;"> <b>Please enter a valid message and submit the form </b></div>
+        <div class="success1" style="display: none;"> <b>Message Sent Successfull </b></div>
+
+        
+<!-- Parent Div that holds all other elements -->
+         <div class="BG" id="MatchNotFound">
+            <div class="popualbg">
+
+<!-- TWILIO Header -->
+                        <ul>
+                            <li>
+                                <span class="sectionHdr">Welcome To Twilio SMS Wizard</span>
+                            </li>
+                        </ul>
+
+
+<!-- CLIENT NAME -->
+                        <div class="fld mT20">
+                            <div class="readlabel">
+                                <label class="fldText">Lead Name</label>
+                            </div>
+
+                            <div class="readvalue"> 
+                                <span id = "fullNameId" class="vleText">Loading ... </span>
+                            </div>
+                        </div>
+
+<!-- Send TO Number -->
+                        <div class="fld">
+                               <div class="readlabel"><label class="fldText">Mobile</label></div>
+                               <div class="readvalue"><span id = "mobileId" class="vleText">Loading ...</span></div>
+                        </div>  
+
+<!-- MESSAGE CONTENT -->
+                        <div class="fld">
+                          <div class="fldlabel">
+                                <label class="fldText">Message Content</label>
+                          </div>
+                          <div class="fldvaluebox">
+                            <textarea class="valueboxtext" placeholder="Type your message here..." id="msgcontent" type = "text" name = "Message Content"></textarea>
+                          </div>
+                        </div>
+
+<!-- SEND AND BUTTONS  -->
+                        <div class="btnbg">
+                        <button class="primaryBtn fR" id="submit1" onclick=sendsms()>Send SMS</button>
+                        <button class="secondaryBtn fR mR10" id="submit2" onclick=cancelsms()>Cancel</button>
+                        </div>
+
+
+
+            </div>
+        </div> 
+
+
+
+<!-- select template selectbox -->
+                   <div class="fld">
+                        <div class="fldlabel">
+                            <label class="fldText">Message Template</label>
+                        </div>
+
+                        <div class="fldvalue">
+                            <select id="namesList"></select>
+                        </div>
+                    </div>
+<!-- select template selectbox --> 
+
+<!---- Body Ends Here----->
+
+
+var AuthToken,accSid,mobNum,mob,recId,globRecData = [];   
+
+$(document).ready(function(){
+                    ZOHO.embeddedApp.init().then(function(){                                    //Initialize the WidgetSDK Library ....  
+                    ZOHO.CRM.INTERACTION.getPageInfo().then(function(data){  
+                   
+                    recId = data.data["id"];
+                    mob = data.data["Mobile"];
+                    $("#mobileId").html(data.data["Mobile"]);
+                    $("#fullNameId").html(data.data["Full_Name"]);
+                     
+                    ZOHO.CRM.CONFIG.getOrgVariable("Twilio AuthToken").then(function(data){      //  Syntax to fetch Twilio Authtoken....
+                        AuthToken = data.Success.Content;
+                    });
+
+                    ZOHO.CRM.CONFIG.getOrgVariable("Twilio Account SID").then(function(data){     // Syntax to fetch Twilio Accoutn SID ....
+                        accSid = data.Success.Content;
+                    });
+                            
+                    ZOHO.CRM.CONFIG.getOrgVariable("Twilio Mobile Number").then(function(data){   // Syntax to fetch Twilio Mobile Number                
+                        mobNum = data.Success.Content
+                    });
+
+                });
+//select template code goes here ----->
+
+//select template code ends here <-----
+                });
+                });
+
+
+
+function cancelsms()      //Cancel Sending SMS
+        {
+            ZOHO.CRM.UI.Popup.closeReload();
+        }
+
+
+function sendsms()       // Send sms functions
+        {
+                console.log("AuthToken ::: " + AuthToken);
+                console.log("AccSID ::: " + accSid);
+                console.log("TwilioNumber ::: " + mobNum);
+           var msgContent = $("#msgcontent").val().trim();      //Fetching SMS text from the UI 
+                
+                if(msgContent == "")
+                {
+                    $('.success').slideDown(function() {
+                    $('.success').delay(3000).slideUp();
+                    });
+                }
+
+                else
+                {                        
+                    var credentials = accSid + ":" + AuthToken;   //Encoding Twilio Credentials 
+                    baseEncoded = btoa(credentials);                            
+                    var encode = baseEncoded.replace('\n', '');                                
+
+                    $.ajax({                                      //Invoking Twilio API to send SMS
+                            url : "https://api.twilio.com/2010-04-01/Accounts/" + accSid + "/Messages.json",
+                            type: 'POST',
+                            dataType : "json",
+                            headers: {"Authorization":"Basic " + encode},
+                            data: {"To" : mob , "From" : mobNum , "Body" : msgContent},
+                            success : function(data){
+                                $('.success1').slideDown(function() {
+                                $('.success1').delay(2000).slideUp();
+
+                                setTimeout(function() {
+                                    ZOHO.CRM.API.addNotes({Entity:"Contacts",RecordID:recId,Title:"Message Sent",Content:msgContent})
+                                                .then(function(data){
+                                                    ZOHO.CRM.UI.Popup.closeReload();
+                                                });
+                                                    }, 2000);
+                                            });
+                                        }
+                            });
+                }
+        };
+
+
+

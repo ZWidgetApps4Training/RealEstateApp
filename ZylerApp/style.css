@@ -1,0 +1,53 @@
+.displayMsg {
+    font-weight: 700;
+    font-size: 60px;
+    line-height: 72px;
+    position: absolute;
+    top: 15%;
+    left: 15%;
+}
+
+.smallDisplay {
+    font-size: 24px;
+    line-height: 32px;
+    position: absolute;
+    font-weight: 400;
+    left: 20%;
+    top: 30%;
+}
+
+.btnStyle {
+    min-width: 100px;
+    height: 50px;
+    background-color: #16A085;
+    /* background-color: #3498DB; */
+    color: #FDFEFE;
+    font-weight: bold;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 10px;
+
+}
+
+.btnStyleNotActive {
+    min-width: 100px;
+    height: 50px;
+    background-color: white;
+    color: #16A085;
+    font-weight: bold;
+    border: 2px solid #16A085;
+    outline: none;
+    cursor: pointer;
+
+}
+
+.btnDisplayStyle {
+    left: 30%;
+    top: 45%;
+    position: absolute;
+}
+
+.primarys {
+    background-color: #76D7C4 !important;
+}

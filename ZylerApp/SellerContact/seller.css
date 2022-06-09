@@ -1,0 +1,146 @@
+.headings {
+    color: #16A085;
+    font-weight: 700;
+    text-align: center;
+}
+
+.boxWhite {
+    width: 100%;
+    min-height: 200px;
+    border-radius: 10px;
+    background-color: white;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+}
+
+.inputStyle {
+    width: 100%;
+    height: 45px;
+    outline: none;
+    border: none;
+    border-bottom: 2px solid #16A085;
+}
+
+.labelStyle {
+    color: black;
+    font-weight: 700;
+}
+
+.selectStyle {
+    width: 100%;
+    height: 45px;
+    border: none;
+    border-bottom: 2px solid #16A085;
+}
+
+.btnStyle {
+    min-width: 100px;
+    height: 50px;
+    background-color: #16A085 !important;
+    /* background-color: #3498DB; */
+    color: #FDFEFE;
+    font-weight: bold;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 10px;
+
+}
+
+.btnStyleNotActive {
+    min-width: 100px;
+    height: 50px;
+    background-color: white;
+    color: #16A085 !important;
+    font-weight: bold;
+    border: 2px solid #16A085 !important;
+    outline: none;
+    cursor: pointer;
+
+}
+
+.centerImg {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+}
+
+.error input {
+    border-bottom: 2px solid red;
+}
+
+.error select {
+    border-bottom: 2px solid red;
+}
+
+
+.loaderBox {
+    width: 300px;
+    min-height: 150px;
+    background: rgba(16, 17, 16, 0.7);
+    border-radius: 15px;
+}
+
+.centerLoader {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+}
+
+.loader {
+    border: 10px solid #f3f3f3;
+    border-radius: 50%;
+    border-top: 10px solid #3498db;
+    width: 40px;
+    height: 40px;
+    left: 40%;
+    top: 5px;
+    position: relative;
+    -webkit-animation: spin 2s linear infinite;
+    animation: spin 2s linear infinite;
+}
+
+/* Safari */
+@-webkit-keyframes spin {
+    0% {
+        -webkit-transform: rotate(0deg);
+    }
+
+    100% {
+        -webkit-transform: rotate(360deg);
+    }
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+#btnTrigger{
+    display: none;
+  }
+
+
+  .stylesImg{
+    width: 80px;
+    height: 80px;
+}
+
+.centerDiv{
+  position: absolute;
+  top: 95%;
+  left: 55%;
+  /* width: 100%; */
+  /* height: 300px; */
+  margin: -100px 0 0 -100px;
+}
+
+.primarys {
+    background-color: #76D7C4 !important;
+}

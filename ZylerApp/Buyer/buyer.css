@@ -1,0 +1,215 @@
+.searchTxtStyle {
+    width: 100%;
+    height: 60px;
+    outline: none;
+    border: 2px solid #16A085!important;
+    background-color: #EBF5FB;
+    color: black;
+    font-weight: 500;
+    font-size: 20px;
+}
+
+.centerInput{
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    margin-top: 15px;
+}
+
+.designBtn{
+    align-items: center;
+    display: flex !important;
+    justify-content: center;
+    margin-top: 15px;
+    color: white !important;
+    font-weight: 600 !important;
+}
+
+.centerImg{
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    margin-top: 15px;
+}
+
+::placeholder{
+    font-size: 15px;
+    padding-left: 10px;
+}
+
+.imgStyle{
+    width: 100%;
+    height: 450px;
+}
+
+.imgSize {
+    width: 285px;
+    height: 190px;
+}
+
+.imgStyles {
+    width: 100%;
+    height: 400px;
+  }
+
+  .btnStyle {
+    min-width: 100px;
+    height: 50px;
+    background-color: #16A085!important;
+    /* background-color: #3498DB; */
+    color: #FDFEFE;
+    font-weight: bold;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 10px;
+  
+  }
+  
+  .btnStyleNotActive {
+    min-width: 100px;
+    height: 50px;
+    background-color: white;
+    color: #16A085!important;
+    font-weight: bold;
+    border: 2px solid #16A085!important;
+    outline: none;
+    cursor: pointer;
+  
+  }
+
+  .verticalLine{
+    height: 600px;
+    border-right: 3px solid #16A085;
+  }
+
+  .Headings{
+    color: #16A085!important;
+    font-weight: 700;
+  }
+
+  #wrapper {
+    width:150px; /* width of viewport in your case 100% */
+    height:150px; /* height of viewport in your case 100% */
+    overflow:hidden;
+    margin:10px 0 0 0;
+    border:1px solid #777;
+    /*position:fixed;*/
+  }
+  
+  #map {
+    position:relative; /* what #map img is relative to */
+  }
+  
+  #map img{
+    position:absolute; /* need this to make dragging easy */
+    top:0;
+    left:0;
+    border:0 none transparent;
+  }
+
+
+  .loaderBox{
+    width: 300px;
+    min-height: 150px;
+  
+      background: rgba(16, 17, 16, 0.7);
+      border-radius: 15px;
+  }
+
+  .centerLoader{
+    position:absolute;
+    top: 65%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    z-index: 1000;
+  }
+
+  .loader {
+    border: 10px solid #f3f3f3;
+    border-radius: 50%;
+    border-top: 10px solid #3498db;
+    width: 40px;
+    height: 40px;
+    left: 40%;
+    top: 5px;
+    position: relative;
+    -webkit-animation: spin 2s linear infinite;
+    animation: spin 2s linear infinite;
+  }
+  
+  /* Safari */
+  @-webkit-keyframes spin {
+    0% { -webkit-transform: rotate(0deg); }
+    100% { -webkit-transform: rotate(360deg); }
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+
+  .newPreviewImg{
+    width: 70%;
+    height: 200px;
+  }
+
+  .primarys {
+    background-color: #76D7C4 !important;
+}
+
+.btn-primary {
+  color: #fff;
+  background-color: #16A085 !important;
+  border-color: #16A085 !important;
+}
+
+.btn-primary:not(:disabled):not(.disabled).active, .btn-primary:not(:disabled):not(.disabled):active, .show>.btn-primary.dropdown-toggle {
+  color: #fff;
+  background-color:#138D75 !important;
+  border-color: #138D75 !important;
+}
+
+.cards-wrapper {
+  display: flex;
+  justify-content: center;
+}
+.card .imgSizes {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+
+.pagination {
+	background: #16A085;
+	padding: 1rem;
+	margin-bottom: 1rem;
+	text-align: center;
+	display: flex;
+	justify-content: center;
+}
+
+#numbers {
+	padding: 0;
+	margin: 0 2rem;
+	list-style-type: none;
+	display: flex;
+}
+
+#numbers li a {
+	color: #fff;
+	padding: .5rem 1rem;
+	text-decoration: none;
+	opacity: .7;
+  cursor: pointer;
+}
+
+#numbers li a:hover {
+	opacity: 1;
+}
+
+#numbers li a.active {
+	opacity: 1;
+	background: #fff;
+	color: #333;
+}

@@ -1,0 +1,314 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="./seller.css">
+    <link rel = "icon" href ="../images/icon2.webp" type = "image/x-icon">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css">
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>   
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <title>Buyer Contact Page</title>
+    <script src="./seller.js"></script>
+
+    <script>
+           $(document).ready(function () {
+           document.getElementById('loadings').style.display = "none";
+           enableEntireForms();
+           });
+    </script>
+    
+</head>
+
+<body style="background-color:#EBF5FB ;">
+    <nav class="navbar navbar-expand-sm primarys navbar-dark">
+        <a class="navbar-brand" href="https://therealestate-710385233.development.catalystserverless.com/app/ZylerApp/index.html">
+            <img src="../images/logo.png" alt="Logo" style="width:40px;">
+        </a>
+        <h2 style="text-align: center;left: 40%;position: relative; color: black;font-weight: 700;">ZYLKER
+        </h2>
+        <ul class="navbar-nav " style="left: 70%;
+        position: relative;">
+            <li class="nav-item" style="width: 90px;">
+                <a class="nav-link" href="https://therealestate-710385233.development.catalystserverless.com/app/ZylerApp/Buyer/buyer.html?isRedirectFromCrm=false&PropName=" style="color: black;font-size: 20px;font-weight: 700;" href="#">BUY</a>
+            </li>
+            <li class="nav-item active" style="width: 90px;">
+                <a class="nav-link active" style="color: black;font-size: 20px;font-weight: 700;" href="https://therealestate-710385233.development.catalystserverless.com/app/ZylerApp/SellerContact/seller.html">SELL</a>
+            </li>
+            <li class="nav-item" style="width: 90px;">
+                <a class="nav-link" style="color: black;font-size: 20px;font-weight: 700;" href="#">RENT</a>
+            </li>
+        </ul>
+    </nav>
+
+    <div id="loadings" class="centerLoader">
+        <img src="https://flevix.com/wp-content/uploads/2019/07/Bar-Preloader-1.gif" alt="loading">
+    </div>
+
+    <!-- <div id="loadings" >
+        <div class="loaderBox centerLoader">
+            <div class="loader"></div>
+            <div style="color: white;
+      font-weight: 700;
+      text-align: center;">
+                <h4 style="margin-top: 15px;">Loading...</h4>
+                <p>Please wait, While we process your request..</p>
+            </div>
+        </div>
+    </div> -->
+
+    <div class="Container-fluid" id="containers">
+        <div class="row" style="margin-top: 20px;">
+            <div class="col-md-12">
+                <h3 class="headings">Seller's Contact Details</h3>
+            </div>
+        </div>
+        <div>
+            <button type="button" class="btn btn-danger" data-toggle="modal" id="btnTrigger"
+                data-target="#sucessUpdate" data-backdrop="false"></button>
+        </div>
+        <div class="modal fade" id="sucessUpdate" role="dialog" style="background: rgba(0, 0, 0, 0.5);padding-top: 15%;">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" style="left: 20%;
+                        position: relative;"  data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title" id="updateDowngrade" style="text-align: center;
+                        right: 37%;
+                        position: relative;"></h4>
+                    </div>
+                    <div class="modal-body" style="min-height: 100px;top: -20px;">
+                        <div class="centerDiv">
+                            <img class="stylesImg"
+                                src="../images/TickGreen.gif"
+                                alt="success">
+                        </div>
+                        <div style="margin-top: 20px;">
+                            <p style="text-align: center;
+                            font-weight: bold;
+                            top: 40px;
+                            position: relative;" id="sucessAndFailureResponse"></p>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btnStyle" onclick="okay()" data-dismiss="modal">Ok</button>
+                    </div>
+    
+                </div>
+            </div>
+        </div>
+        <div class="row" style="margin-top: 20px;margin-bottom: 25px;">
+            <div class="col-md-2"></div>
+            <div class="col-md-8">
+                <div class="boxWhite">
+                    <h4 style="padding: 25px;color:#16A085;font-weight: 700;text-align: center;">Contact Info</h4>
+                    <div class="row" style="padding: 20px;">
+                        <div class="col-md-6 form-field">
+                            <label for="firstName" class="labelStyle" style="width: 100%;">First Name <span style="color: red;">*</span></label>
+                            <input type="text" class="inputStyle" id="firstName" autocomplete="true" placeholder="First Name">
+                            <small style="color:red ;"></small>
+                        </div>
+                        <div class="col-md-6 form-field">
+                            <label for="lastname" class="labelStyle" style="width: 100%;">Last Name<span style="color: red;">*</span></label>
+                            <input type="text" class="inputStyle" autocomplete="true" id="lastname" placeholder="Last Name">
+                            <small style="color:red ;"></small>
+                        </div>
+                    </div>
+                    <div class="row" style="padding: 20px;">
+                        <div class="col-md-6 form-field">
+                            <label for="email" class="labelStyle" style="width: 100%;">Email<span style="color: red;">*</span></label>
+                            <input type="text" class="inputStyle" autocomplete="true" id="email" placeholder="Email">
+                            <small style="color:red ;"></small>
+                        </div>
+                        <div class="col-md-6 form-field">
+                            <label for="secEmail" class="labelStyle" style="width: 100%;">Secondary Email</label>
+                            <input type="text" class="inputStyle" autocomplete="true" id="secEmail" placeholder="Secondary Email">
+                        </div>
+                    </div>
+                    <div class="row" style="padding: 20px;">
+                        <div class="col-md-6 form-field">
+                            <label for="mobile" class="labelStyle" style="width: 100%;">Mobile<span style="color: red;">*</span></label>
+                            <input type="text" class="inputStyle" autocomplete="true" id="mobile" placeholder="Mobile Number">
+                            <small style="color:red ;"></small>
+
+                        </div>
+                        <div class="col-md-6 form-field">
+                            <label for="phone" class="labelStyle" style="width: 100%;">Phone</label>
+                            <input type="text" class="inputStyle"  autocomplete="true" id="phone" placeholder="Phone Number">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2"></div>
+        </div>
+        <div class="row" style="margin-top: 20px;margin-bottom: 25px;">
+            <div class="col-md-2"></div>
+            <div class="col-md-8">
+                <div class="boxWhite">
+                    <h4 style="padding: 25px;color:#16A085;font-weight: 700;text-align: center;">Address Info</h4>
+                    <div class="row" style="padding: 20px;">
+                        <div class="col-md-6">
+                            <label for="address1" class="labelStyle" style="width: 100%;">Address 1<span style="color: red;">*</span></label>
+                            <input type="text" class="inputStyle" autocomplete="true" id="address1" placeholder="Address 1">
+                            <small style="color:red ;"></small>
+
+                        </div>
+                        <div class="col-md-6">
+                            <label for="address2" class="labelStyle" style="width: 100%;">Address 2</label>
+                            <input type="text" class="inputStyle" autocomplete="true" id="address2" placeholder="Address 2">
+                        </div>
+                    </div>
+                    <div class="row" style="padding: 20px;">
+                        <div class="col-md-6">
+                            <label for="city" class="labelStyle" style="width: 100%;">City<span style="color: red;">*</span></label>
+                            <input type="text" class="inputStyle" autocomplete="true" id="city" placeholder="City">
+                            <small style="color:red ;"></small>
+
+                        </div>
+                        <div class="col-md-6">
+                            <label for="State" class="labelStyle" style="width: 100%;">State<span style="color: red;">*</span></label>
+                            <input type="text" class="inputStyle" autocomplete="true" id="State" placeholder="State">
+                            <small style="color:red ;"></small>
+
+                        </div>
+                    </div>
+                    <div class="row" style="padding: 20px;">
+                        <div class="col-md-6">
+                            <label for="Country" class="labelStyle" style="width: 100%;">Country<span style="color: red;">*</span></label>
+                            <input type="text" class="inputStyle" autocomplete="true" id="Country" placeholder="Country">
+                            <small style="color:red ;"></small>
+
+                        </div>
+                        <div class="col-md-6">
+                            <label for="zipCode" class="labelStyle" style="width: 100%;">Zip Code<span style="color: red;">*</span></label>
+                            <input type="text" class="inputStyle" autocomplete="true" id="zipCode" placeholder="Zip Code">
+                            <small style="color:red ;"></small>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2"></div>
+        </div>
+        <div class="row" style="margin-top: 20px;margin-bottom: 25px;">
+            <div class="col-md-2"></div>
+            <div class="col-md-8">
+                <div class="boxWhite">
+                    <h4 style="padding: 25px;color:#16A085;font-weight: 700;text-align: center;">Property Details</h4>
+                    <div class="row" style="padding: 20px;">
+                        <div class="col-md-6">
+                            <label for="type" class="labelStyle" style="width: 100%;">Property Type<span style="color: red;">*</span></label>
+                            <select name="" id="type" class="selectStyle">
+                                <option value="">--Select--</option>
+                                <option value="Land">Land</option>
+                                <option value="House / Villa">House / Villa</option>
+                                <option value="Flat / Apartment">Flat / Apartment</option>
+                                <option value="Shop">Shop</option>
+                            </select>
+                            <small style="color:red ;"></small>
+
+                        </div>
+                        <div class="col-md-6">
+                            <label for="bedrooms" class="labelStyle" style="width: 100%;">No of Bedrooms<span style="color: red;">*</span></label>
+                            <select name="" id="bedrooms" class="selectStyle">
+                                <option value="">--Select--</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                            </select>
+                            <small style="color:red ;"></small>
+
+                        </div>
+                    </div>
+                    <div class="row" style="padding: 20px;">
+                        <div class="col-md-6">
+                            <label for="bathrooms" class="labelStyle" style="width: 100%;">No of Bathrooms<span style="color: red;">*</span></label>
+                            <select name="" id="bathrooms" class="selectStyle">
+                                <option value="">--Select--</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                            </select>
+                            <small style="color:red ;"></small>
+
+                        </div>
+                        <div class="col-md-6">
+                            <label for="locality" class="labelStyle" style="width: 100%;">Locality<span style="color: red;">*</span></label>
+                            <input type="text" class="inputStyle" autocomplete="true" id="locality" placeholder="Locality">
+                            <small style="color:red ;"></small>
+
+                        </div>
+                    </div>
+                    <div class="row" style="padding: 20px;">
+                        <div class="col-md-6">
+                            <label for="PropertyName" class="labelStyle" style="width: 100%;">Property Name</label>
+                            <input type="text" class="inputStyle" autocomplete="true" id="PropertyName" placeholder="Property Name">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="Rate_per_sqft" class="labelStyle" style="width: 100%;">Rate per sqft</label>
+                            <input type="text" class="inputStyle" autocomplete="true" id="Rate_per_sqft" placeholder="Rate per sqft">
+                        </div>
+                    </div>
+                    <div class="row" style="padding: 20px;">
+                        <div class="col-md-6">
+                            <label for="carpetArea" class="labelStyle" style="width: 100%;">Carpet Area</label>
+                            <input type="text" class="inputStyle" autocomplete="true" id="carpetArea" placeholder="Carpet Area">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="Build_Up_Area" class="labelStyle" style="width: 100%;">Build Up Area</label>
+                            <input type="text" class="inputStyle" autocomplete="true" id="Build_Up_Area" placeholder="Build Up Area">
+                        </div>
+                    </div>
+                    <div class="row" style="padding: 20px;">
+                        <div class="col-md-6">
+                            <label for="areaSqft" class="labelStyle" style="width: 100%;">Total Area in Sqft</label>
+                            <input type="text" class="inputStyle" autocomplete="true" id="areaSqft" placeholder="Total Area in Sqft">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="NoofUnit" class="labelStyle" style="width: 100%;">No of Unit</label>
+                            <input type="text" class="inputStyle" autocomplete="true" id="NoofUnit" placeholder="No of Unit">
+                        </div>
+                       
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2"></div>
+        </div>
+        <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-8 centerImg">
+                <button class="btnStyleNotActive" id="cancelBtn" style="margin: 15px;">Cancel</button>
+                <button class="btnStyle" id="submitBtn" onclick="submit()">Submit</button>
+            </div>
+            <div class="col-md-2"></div>
+           
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        $(function(){
+          $('#datetimepicker').datetimepicker();
+        });
+   </script>
+</body>
+
+</html>
