@@ -1,0 +1,188 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+    <title>Find Seller</title>
+    <script src="confirmDeal.js"></script>
+    <script type="text/javascript" src="./lib/handlebars.js"></script>
+    <script type="text/javascript" src="https://live.zwidgets.com/js-sdk/1.1/ZohoEmbededAppSDK.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            disableAll();
+            ZOHO.embeddedApp.on("PageLoad", function (datas) {
+                console.log("in pageload");
+                pageloadInfo.pageLoadData = datas;
+                console.log(pageloadInfo.pageLoadData);
+                getRelatedPropertyDetails();
+
+            })
+            ZOHO.embeddedApp.init().then(function () {
+                console.log("init");
+            });
+
+        });
+    </script>
+</head>
+
+<body>
+    <div class="Container-fluid" id="home">
+        <div class="notify"><span id="notifyType" style="top: 10px;
+            position: relative;"></span></div>
+        <div class="row" style="margin-top: 35px;">
+            <div class="col-md-12 col-12 col-lg-12">
+                
+                <h4 class="textStyle">Confirm Deal</h4>
+                <p style="color: #5DADE2;text-align: center;font-weight: 700;">Select the property based on your need.
+                </p>
+            </div>
+        </div>
+        <!-- <div id="loadings" style="position: relative;">
+            <div class="loaderBox centerLoader">
+                <div class="loader"></div>
+                <div style="color: white;
+          font-weight: 700;
+          text-align: center;">
+                    <h4 style="margin-top: 15px;">Loading...</h4>
+                    <p>Please wait, While we process your request..</p>
+                </div>
+            </div>
+        </div> -->
+        <div id="loadings" class="centerLoader">
+            <img src="https://flevix.com/wp-content/uploads/2019/07/Bar-Preloader-1.gif" alt="loading" style="width: 300px;height: 300px;">
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <table class="table table-hover table-bordered">
+                    <thead id="propertiesHead">
+                    </thead>
+                    <tbody id="propertiesBody">
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-12">
+                <div class="row" style="margin-bottom: 20px;">
+                    <div class="col-3"></div>
+                    <div class="col-3">
+                        <button style="float: right;" class="btnStyleNotActive" onclick="closeWidget()"> Close</button>
+                    </div>
+                    <div class="col-3">
+                        <button class="btnStyle" onclick="propertyDetails();">Property Details</button>
+                    </div>
+                    <div class="col-3"></div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="Container-fluid" id="propertyInfo">
+        <div class="notify"><span id="notifyType" style="top: 10px;
+            position: relative;"></span></div>
+        <div class="row" >
+            <div class="col-md-12 col-12 col-lg-12">
+                <h4 class="textStyle">Property Details</h4>
+                <p style="color: #5DADE2;text-align: center;font-weight: 700;">Detailed info of the selected property.
+                </p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 col-md-12" id="propertyImg">
+            </div>
+        </div>
+        <div class="row" style="margin-top: 20px;">
+            <div class="col-2"></div>
+            <div class="col-8">
+                <table class="table table-hover table-bordered">
+                    <thead id="selectedHead">
+                    </thead>
+                    <tbody id="selectedBody">
+                    </tbody>
+                </table>
+
+                <div class="centerBtn" id="confirmBtn">
+                    <button style="margin: 15px;" class="btnStyleNotActive" onclick="back()">Back</button>
+                    <button style="margin: 15px;" class="btnStyle" onclick="confirmDeal()">Confirm Deal</button>
+                </div>
+               
+            </div>
+            <div class="col-2"></div>
+        </div>
+    </div>
+
+    <div class="Container-fluid" id="successInfo">
+        <div class="row" >
+            <div class="col-md-12 col-12 col-lg-12" >
+                <h4 class="textStyle">Deal Confirmed</h4>
+                <p style="color: #087f00;text-align: center;font-weight: 700;">Transaction has been completed with the following property confirmed for purchase. Click <a  id="idClick" style="color: #007bff; cursor: pointer;" href="" onclick="here()" target="_blank">here</a> to view more details of that property.  
+                </p>
+                <p id="propertyId" style="color: #087f00;text-align: center;font-weight: 700;"></p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-6 col-md-6" id="successImg"> 
+            </div>
+            <div class="col-6 col-md-6">
+                <table class="table table-hover table-bordered"> 
+                    <tbody id="successBody">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <!-- <p style="color: #3498DB;
+                font-weight: 700;
+                text-align: center;">The Sales Agreement has not yet been completed, Would you like to proceed with E-sign?</p> -->
+                
+                <div class="centerBtn">
+                    <button style="margin: 15px;" class="btnStyle" onclick="later()">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="Container-fluid" id="homeEsign">
+        <div class="row" >
+            <div class="col-md-12 col-12 col-lg-12">
+                <h4 class="textStyle">Confirm Deal</h4>
+               <div style="margin-top: 35%;">
+                <p style="color: #087f00;text-align: center;font-weight: 700;">The Deal has been confirmed successfully against the Property id 
+                </p>
+                <p id="homepropertyId" style="color: #087f00;text-align: center;font-weight: 700;"></p>
+               </div>
+               
+            </div>
+        </div>
+
+        <!-- <div class="row">
+            <div class="col-12">
+                <p style="color: #3498DB;
+                font-weight: 700;
+                text-align: center;">Would you like to proceed with the Sales Agreement E-sign?</p>
+                
+                <div class="centerBtn">
+                    <button style="margin: 15px;" class="btnStyleNotActive" onclick="later()">Later</button>
+                    <button style="margin: 15px;" class="btnStyle" onclick="Esign()">Sales Aggrement for E-Sign</button>
+                </div>
+            </div>
+        </div> -->
+    </div>
+</body>
+</html>
