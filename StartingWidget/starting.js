@@ -66,6 +66,17 @@ function twilioCredentials() {
     link.href = address;
 }
 
+function onLoader() {
+    document.getElementById('loadings').style.display = 'block';    
+    document.getElementById('opacitys').style.opacity = '0.4';    
+}
+
+
+function offLoader() {
+    document.getElementById('loadings').style.display = 'none';
+    document.getElementById('opacitys').style.opacity = '1';
+}
+
 function closing() {
     console.log("close");
     ZOHO.CRM.UI.Popup.close()
@@ -185,7 +196,7 @@ function authorizeClient() {
 
 
 function twilioSave() {
-
+    onLoader();
     var SID = document.getElementById('twilioSID').value;
     var Auth = document.getElementById('twilioAuth').value;
     var Num = document.getElementById('twilioNumber').value;
@@ -193,13 +204,19 @@ function twilioSave() {
     console.log(Auth);
     console.log(Num);
     if (SID == "") {
-        alert("Please enter Twilio Account SID")
+        alert("Please enter Twilio Account SID");
+        offLoader();
+
     }
     else if (Auth == "") {
-        alert("Please enter Twilio AuthToken")
+        alert("Please enter Twilio AuthToken");
+        offLoader();
+
     }
     else if (Num == "") {
-        alert("Please enter Twilio Mobile Number")
+        alert("Please enter Twilio Mobile Number");
+        offLoader();
+
     }
     else {
         var str = SID + ":" + Auth;
@@ -214,12 +231,17 @@ function twilioSave() {
             var list = JSON.parse(data);
             console.log(list);
             if (list.code == 20003) {
-                alert("Please check either your entered Twilio Account SID or AuthToken is incorrect")
+                alert("Please check either your entered Twilio Account SID or AuthToken is incorrect");
+                offLoader();
             } else if (list.code == 20404) {
-                alert("Please check either your entered Twilio Account SID or AuthToken is incorrect")
+                alert("Please check either your entered Twilio Account SID or AuthToken is incorrect");
+                offLoader();
+
             }
             else if (list.code == 20008) {
-                alert("Resource not accessible with Test Account Credentials")
+                alert("Resource not accessible with Test Account Credentials");
+                offLoader();
+
             } else if (list.first_page_uri != undefined && (list.first_page_uri != null || list.first_page_uri != "")) {
                 ZOHO.CRM.CONNECTOR.invokeAPI("crm.set", { "apiname": "therealestate__Twilio_Account_SID", "value": SID }).then(function () {
                     ZOHO.CRM.CONNECTOR.invokeAPI("crm.set", { "apiname": "therealestate__Twilio_AuthToken", "value": Auth }).then(function () {
@@ -228,6 +250,7 @@ function twilioSave() {
                             var value = JSON.parse(data);
                             if (value['status_code'] == "200") {
                                 console.log("success");
+                                offLoader();
                                 $('#btnTrigger').click();
                                 document.getElementById('sucessAndFailureResponse').innerHTML = 'The data has been updated successfully.';
                                 document.getElementById('updateDowngrade').innerHTML = 'Twilio Info';
@@ -238,6 +261,8 @@ function twilioSave() {
             }
             else {
                 alert("Please check either your entered Twilio Account SID or AuthToken is incorrect");
+                offLoader();
+
             }
 
         });

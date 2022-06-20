@@ -30,6 +30,8 @@
                 document.getElementById('clientPortal').style.display = "none";
                 document.getElementById('zylker').style.display = "none";
                 document.getElementById('twilio').style.display = "none";
+            document.getElementById('loadings').style.display = "none";
+
                 fetchDataFromOrg();
             });
         });
@@ -247,7 +249,10 @@
         </div>
 
         <div id="twilio" class="row" style="margin-top: 20px;">
-            <div class="col-md-12">
+            <div id="loadings" class="centerLoader">
+                <img src="./image/loadinggif.gif" alt="loading" class="loadingIconStyle">
+            </div>
+            <div class="col-md-12" id="opacitys">
                 <p style="font-weight: 700;font-size: 17px;top: 2px;position: absolute;cursor: pointer;"
                     onclick="back()">
                     Back </p>
