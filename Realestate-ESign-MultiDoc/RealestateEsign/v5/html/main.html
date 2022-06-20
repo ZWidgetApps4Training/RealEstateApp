@@ -2,13 +2,18 @@
 
 <head>
    <meta charset="UTF-8">
-   <link rel="stylesheet" type="text/css" href="../css/style.css">      
+   <link rel="stylesheet" type="text/css" href="../css/style.css">
    <script src="../js/jquery-1.12.4.min.js"></script>
    <script type="text/javascript" src="../lib/handlebars.js"></script>
-   <script src="../lib/WidgetTrigger.js"></script>    
-     <script type="text/javascript" src="https://live.zwidgets.com/js-sdk/1.0.6/ZohoEmbededAppSDK.min.js"></script>
-   <script src="../js/chosen.jquery.js"></script>          
+   <script src="../lib/WidgetTrigger.js"></script>
+   <script type="text/javascript" src="https://live.zwidgets.com/js-sdk/1.0.6/ZohoEmbededAppSDK.min.js"></script>
+   <script src="../js/chosen.jquery.js"></script>
    <script src=""></script>
+   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+   integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+   integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+   crossorigin="anonymous"></script>
    <script>
       $(document).ready(function () {
          ZOHO.embeddedApp.on("PageLoad", function (pageLoadData) {
@@ -50,6 +55,44 @@
       <span class="two2">.</span><span class="three">.</span>
    </div>
    <form action="#" id="uploadFiles">
+      <div id="loadingGif" class="centerLoader">
+         <img src="../images/loadinggif.gif" alt="loading" style="width: 300px;height:300px;">
+      </div>
+      <div class="modal fade" id="sucessUpdate" role="dialog">
+         <div class="modal-dialog modal-lg">
+            <div class="modal-content" style="height: 300px !important;">
+               <div class="modal-header">
+                  <button type="button" style="left: 10%;
+                  position: relative;" class="close" onclick="okay()" data-dismiss="modal">&times;</button>
+                  <h4 class="modal-title" id="updateDowngrade" style="text-align: center;
+                  right: 44%;
+                  position: relative;"></h4>
+               </div>
+               <div class="modal-body" style="min-height: 100px;">
+                  <div class="centerDiv">
+                     <img class="stylesImg" id="Success_tick" src="../images/TickGreen.gif" alt="success">
+                  </div>
+                  <div style="margin-top: 20px;">
+                     <p style="text-align: center;
+                      font-weight: bold;
+                      top: 40px;
+                      position: relative;" id="sucessAndFailureResponse"></p>
+                  </div>
+
+               </div>
+               <div class="modal-footer">
+                  <button type="button" class="btnStyle" onclick="okay()" id="okBtn" data-dismiss="modal">Ok</button>
+
+               </div>
+
+            </div>
+         </div>
+      </div>
+
+      <div>
+         <button type="button" class="btn btn-danger" data-toggle="modal" id="btnTrigger" data-target="#sucessUpdate"
+            data-backdrop="false"></button>
+      </div>
       <div id="zhosingIN">
          <div class="fileUpload">
             <div class="flieLabel"><span class="f16">Add Document</span><span
@@ -69,9 +112,9 @@
                   Templates</a>
             </div>
             <div id="myModal" class="modal">
-               <!-- Modal content -->
+               
                <div class="modal-content">
-                  <span class="close" onclick="closeModal();">&times;</span>
+                  <span class="close" onclick="closeModal();" style="left: 95%;position: relative;">&times;</span>
                   <div class="boxBorder">
                      <div style="justify-content: center;
                     display: flex;
@@ -243,7 +286,7 @@
       </div>
       <div class="btnbg">
          <button type="button" id="submit14" class="blueBtn" onclick="newProcessForm()">Save</button>
-         <image id="loadingGif" src="../images/ajax-loader1.gif" style="display:none" />
+         <!-- <image id="loadingGif" src="../images/ajax-loader1.gif" style="display:none" /> -->
       </div>
    </form>
    </div>

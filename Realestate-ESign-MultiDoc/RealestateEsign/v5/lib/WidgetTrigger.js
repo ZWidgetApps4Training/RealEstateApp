@@ -52,7 +52,6 @@ var vcrmCompName;
 $(document).click(function (e) {
     console.log(e.target);
     var curClass = e.target.getAttribute("id");
-
     var emailRows = $.find("[id*='emailRecip']")
     for (i = 0; i < emailRows.length; i++) {
         //var curRow = emailRows[i].id;
@@ -67,11 +66,8 @@ $(document).click(function (e) {
                 var errorDiv = $(container).find("[id*='error-message']")
                 if (emailVal != "") {
                     if (!validateEmail(emailVal)) {
-
                         $(errorDiv).show();
-
                     } else {
-
                         $(errorDiv).hide();
                     }
                 }
@@ -80,18 +76,17 @@ $(document).click(function (e) {
         }
     }
 });
+
 function validateEmail(email) {
     const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return re.test(String(email).toLowerCase());
 }
 
 function initZohoSign() {
-
     $("#DetailpageLoad").show();
     ZOHO.CRM.CONNECTOR.isConnectorAuthorized("zohosign").then(function (result)   // VerticalInventory Connector 
     {
         if (result == "false") {
-
             ZOHO.CRM.CONNECTOR.authorize("zohosign").then(function (result) {
                 loadSignPage();
             }, function (err) {
@@ -103,15 +98,21 @@ function initZohoSign() {
                 $("#DetailpageLoad").hide();
                 $("#auth").text("Please contact your Administrator to Access Send for Sign");
             });
-
         } else {
             loadSignPage();
         }
     });
-
 }
-function loadSignPage() {
 
+function okay(){
+    ZOHO.CRM.UI.Popup.closeReload()
+    .then(function (data) {
+        console.log(data);
+    })
+}
+
+function loadSignPage() {
+     disableLoader();
     $.getJSON("../lib/config.json", function (result) {
         console.log(result);
         configData = result;
@@ -156,8 +157,6 @@ function loadSignPage() {
                 }
             })
 
-
-
         ZOHO.CRM.CONNECTOR.invokeAPI(configData.connectorsApi.getLicenseDetails, {}).then(function (licence) {
             console.log(licence);
             console.log("licence");
@@ -176,11 +175,6 @@ function loadSignPage() {
             }
 
         })
-
-
-
-
-
         Promise.all([ZOHO.CRM.META.getModules(), ZOHO.CRM.CONFIG.GetCurrentEnvironment()]).then(function (response) {
 
             ZOHO.CRM.CONFIG.getOrgInfo().then(function (orgVar) {
@@ -676,9 +670,23 @@ async function generateactionNew() {
     await generateActions(updateDataGenerator, signOrderSet);
 }
 
+
+function enableLoader(){
+    document.getElementById('loadingGif').style.display = "block";
+}
+
+function disableLoader(){
+    document.getElementById('loadingGif').style.display = "none";
+}
+
 function newProcessForm() {
     uploadFile = false;
     mmFiles = false;
+    window.scroll({
+        top: 0,
+        left: 0,
+        behavior: 'smooth'
+    });
     let datas = generateactionNew();
     if (hostNameisNone == false) {
         if ($('#docuName').val().length > 0) {
@@ -696,6 +704,7 @@ function newProcessForm() {
                         if (!validateEmail(emailVal)) {
                             alert("Invalid Entry. Kindly fill the form fully.");
                             toggleGIF();
+                            disableLoader();
                             $(errorDiv).show();
                             return;
                         }
@@ -715,6 +724,7 @@ function newProcessForm() {
                 //both are present  
                 $("#submit14").hide();
                 $("#loadingGif").show();
+                enableLoader();
                 $("#Loading").show();
                 $("#Loading").text("Processing Mail Merge Execution!");
                 console.log("Upload From MailMerge Templates...");
@@ -848,6 +858,7 @@ function newProcessForm() {
                     $("#submit14").hide();
                     $("#loadingGif").show();
                     $("#Loading").show();
+                    enableLoader();
                     $("#Loading").text("File Upload is in progress...");
 
                     var uploadDocumentData = {
@@ -914,6 +925,7 @@ function newProcessForm() {
                             } else {
                                 alert("Error in Uploading File");
                                 toggleGIF();
+                                disableLoader();
                             }
                         });
                 } else if (fileLen.length > 1 && $.find("[id*='tr_row_']").length > 0) {
@@ -1001,6 +1013,7 @@ function newProcessForm() {
                             } else {
                                 alert("Error in Uploading File");
                                 toggleGIF();
+                                disableLoader();
                             }
                         });
                 }
@@ -1010,6 +1023,7 @@ function newProcessForm() {
                 $("#submit14").hide();
                 $("#loadingGif").show();
                 $("#Loading").show();
+                enableLoader();
                 $("#Loading").text("Processing Mail Merge Execution!");
                 console.log("Upload From MailMerge Templates...");
                 module = data.pageLoadData.Entity;
@@ -1071,6 +1085,7 @@ function newProcessForm() {
                             $("#Loading").text("No file is selected in the sign request, kindly select a file and proceed!");
                             $("#Loading").css({ "color": "#ff0000" });
                             toggleGIF();
+                            disableLoader();
                             setTimeout(function () {
                                 $("#Loading").css({ "color": "black" });
                                 $("#Loading").hide();
@@ -1134,6 +1149,7 @@ function newProcessForm() {
                             $("#Loading").text("No file is selected in the sign request, kindly select a file and proceed!");
                             $("#Loading").css({ "color": "#ff0000" });
                             toggleGIF();
+                            disableLoader();
                             setTimeout(function () {
                                 $("#Loading").css({ "color": "black" });
                                 $("#Loading").hide();
@@ -1189,7 +1205,7 @@ function updateRecipientsAndSendSign(updateRecipientsInfo) {
                         // debugger;
                         if (data.status_code < 300) {
 
-                            $("#Loading").text("uploadFile / Mail Merge sendsignrequest is done!");
+                           
                             populateZohoSignDocuments(response, fileLen);
                         }
                         else {
@@ -1197,8 +1213,11 @@ function updateRecipientsAndSendSign(updateRecipientsInfo) {
                             code = JSON.parse(r).code;
                             if (code == 9101) {
                                 $("#Loading").text("Error in sendsignrequest! Kindly add atleast one field for a signer.");
+                                disableLoader();
                             } else {
                                 $("#Loading").text("Error in sendsignrequest!");
+                                disableLoader();
+
                             }
                         }
 
@@ -1209,6 +1228,7 @@ function updateRecipientsAndSendSign(updateRecipientsInfo) {
                 $("#Loading").text("Error in Update recipients! Kindly make sure, that you have entered a valid data / mandatory details including Host, if you have selected In Person Signer option.");
 
                 toggleGIF();
+                disableLoader();
             }
         });
 }
@@ -1244,14 +1264,16 @@ function populateZohoSignDocumentsEvents(response, recordId, file) {
         if (code.includes("SUCCESS")) {
             var editUrl = response.requests.request_edit_url;
             console.log(editUrl);
-            ZOHO.CRM.UI.Popup.closeReload()
-                .then(function (data) {
-                    console.log(data)
-                })
+            $("#Loading").text("uploadFile / Mail Merge sendsignrequest is done!");
+            $('#btnTrigger').click();
+            document.getElementById('sucessAndFailureResponse').innerHTML = 'Upload documents / Mail merge has been successfully Completed.';
+            document.getElementById('updateDowngrade').innerHTML = 'E-Sign';
+            
 
         } else {
             alert("Error in writing in ZohoSign Document Events");
             toggleGIF();
+            disableLoader();
         }
     });
 }
@@ -1452,6 +1474,7 @@ function populateZohoSignDocuments(response, fileLen) {
         } else {
             alert("Error in writing in ZohoSignDocuments");
             toggleGIF();
+            disableLoader();
         }
     });
 }
@@ -1821,6 +1844,7 @@ function generateActions(updateDataGenerator, signOrderSet) {
             if (displayTextEmail == "") {
                 alert("invalid emailId");
                 toggleGIF();
+                disableLoader();
             }
             if (displayTextName == "") {
                 displayTextName = displayTextEmail.split("@")[0];

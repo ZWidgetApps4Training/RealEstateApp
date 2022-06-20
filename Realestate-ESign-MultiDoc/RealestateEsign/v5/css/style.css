@@ -76,7 +76,7 @@ button {
     height: calc(100% - 62px);
     padding: 0px 30px;
     box-sizing: border-box;
-    overflow-y: scroll;
+    /* overflow-y: scroll; */
     margin-bottom: 62px;
 }
 .f16 {
@@ -217,7 +217,7 @@ display: block;
 .fileUpload {
     padding: 35px 0;
     display: table;
-    width: 100%;
+    width: 99%;
 }
 .fileUploadFromDocs, .fileFromMailMerge {
     width: 620px;
@@ -1131,7 +1131,7 @@ div#Loading span {
     padding: 20px;
     border: 1px solid #888;
     width: 80%;
-    height: 120px;
+    height: 200px;
   }
   
   /* The Close Button */
@@ -1210,4 +1210,40 @@ div#Loading span {
   -o-transform: translate(-50%, -50%);
   -ms-transform: translate(-50%, -50%);
    
+}
+
+
+.centerLoader{
+    position:absolute;
+    top: 45%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    z-index: 1000;
+  }
+
+  #btnTrigger{
+    display: none;
+  }
+
+  .centerDiv {
+    position: absolute;
+    top: 90%;
+    left: 60%;
+    margin: -100px 0 0 -100px;
+}
+
+.stylesImg{
+  width: 80px;
+  height: 80px;
+}
+
+.btnStyle{
+    min-width: 100px;
+    height: 50px;
+    background-color: #3498DB;
+    color: #FDFEFE;
+    font-weight: bold;
+    border: none;
+    outline: none;
+    cursor: pointer;
 }
