@@ -51,3 +51,8 @@
 .primarys {
     background-color: #76D7C4 !important;
 }
+
+.loadingIconStyle{
+    width: 300px;
+    height: 300px;
+  }

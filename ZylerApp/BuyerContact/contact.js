@@ -18,7 +18,7 @@ var minimum;
 var maxBudget;
 var areaSqft;
 var preferedTime;
-
+var ids;
 
 
 function submit() {
@@ -48,7 +48,7 @@ function submit() {
     minimum = document.querySelector("#minimum");
     maxBudget = document.querySelector("#maxBudget");
     areaSqft = document.querySelector("#areaSqft");
-    preferedTime = document.querySelector("#demo-expanded");
+    preferedTime = document.querySelector("#datetimepicker1");
 
     let firstNameValid = inputfileds(firstName, 'First Name');
     let lastNameValid = inputfileds(lastname, 'Last Name');
@@ -63,19 +63,21 @@ function submit() {
     let typeValid = inputfileds(type, 'Property Type');
     let bedroomsValid = inputfileds(bedrooms, 'No of Bedrooms');
     let bathroomsValid = inputfileds(bathrooms, 'No of Bathrooms');
-    let prefered = inputfileds(preferedTime, 'Preffered Time to Contact');
+    let prefered = inputfileds(preferedTime, 'Prefered Time to Contact');
     console.log(preferedTime.value.trim());
     var dateFormat = preferedTime.value + " UTC";
     console.log(dateFormat);
     var dt = new Date(dateFormat);
     var newDt = (dt.toISOString()).split(".")[0];
-    console.log(newDt+"Z");
-    var updatedDt = newDt+"Z";
+    var updatedDt = newDt+"+05:30";
+    console.log(updatedDt);
+
     console.log(dt.toISOString());
 
 
     let validatingForm = firstNameValid && lastNameValid && emailValid && mobileValid && cityValid && zipcodeValid && stateValid && countryValid && localityValid && address1Valid && typeValid && bedroomsValid && bathroomsValid && prefered;
     if (validatingForm) {
+        ids = '';
         onLoader();
         disableEntireForms();
         blurBackground();
@@ -119,16 +121,16 @@ function submit() {
         }).then(response => {
             console.log(response['data'][0]);
             if (response['data'][0]['code'] == 'SUCCESS') {
+            ids = response['data'][0]['details']['id'];
+            console.log(ids);
                 offLoader();
                 enableButtons();
                 enableEntireForms();
                 removeblurBackground();
                 $('#btnTrigger').click();
                 document.getElementById('updateDowngrade').innerHTML = 'Buyer Contact Details';
-                document.getElementById('sucessAndFailureResponse').innerHTML = 'Thanks for submitting your details, We saved your searches against your contact, our RealEstate Agent will get in touch with you soon!';
-
+                document.getElementById('sucessAndFailureResponse').innerHTML = 'Thanks for submitting your details, We saved your searches against your contact, our RealEstate Agent will get in touch with you soon! Click <a id="idClick" href="" onclick="here()" target="_blank">here</a> to navigate to buyer Module.';
             }
-
         })
     } else {
         console.log("failure");
@@ -138,6 +140,13 @@ function submit() {
 function disableButtons() {
     document.getElementById('cancelBtn').disabled = "false";
     document.getElementById('submitBtn').disabled = "false";
+}
+
+function here() {
+    console.log(ids);
+    var link = document.getElementById("idClick");
+    var address = "https://therealestate.zohoplatform.com/crm/tab/Contacts/" + ids;
+    link.href = address;
 }
 
 function okay() {

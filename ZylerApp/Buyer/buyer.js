@@ -120,11 +120,10 @@ function specificProperty(propertyName) {
     });
     Latitude = parseFloat(SpecificProduct['Latitude']);
     Longitude = parseFloat(SpecificProduct['Longitude']);
-    fetch("https://therealestate-710385233.development.catalystserverless.com/server/therealestate/getImagesUsingFolderId/" + SpecificProduct['imageFolderId']).then(data => {
+    fetch("https://therealestate-710385233.development.catalystserverless.com/server/therealestate/getImagesUsingFolderIdIndex/" + SpecificProduct['imageFolderId']+"/0").then(data => {
         return data.json();
     }).then(res => {
         enableSpecificDiv();
-        // initMap();
         var fileArr = [];
         fileArr = res;
         imgArr = [];
@@ -136,6 +135,7 @@ function specificProperty(propertyName) {
         }
         console.log(JSON.stringify(imgArr));
     }).then(response => {
+        getremainingImgs();
         offLoader();
         var newImg = `
         <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
@@ -167,7 +167,7 @@ function specificProperty(propertyName) {
         `
         document.getElementById('carasolImgs').innerHTML = newImg;
         $('.carousel').carousel({
-            interval: 2000
+            interval: 5000
         });
         window.scroll({
             top: 0,
@@ -189,6 +189,72 @@ function specificProperty(propertyName) {
 
 }
 
+async function getremainingImgs(){
+    for(var i=1;i<5;i++){
+     await fetch("https://therealestate-710385233.development.catalystserverless.com/server/therealestate/getImagesUsingFolderIdIndex/" + SpecificProduct['imageFolderId']+"/"+i).then(data => {
+            return data.json();
+        }).then(res => {
+            enableSpecificDiv();
+            var fileArr = [];
+            fileArr = res;
+            // imgArr = [];
+            for (var i = 0; i < fileArr.length; i++) {
+                var blob = new Blob([new Uint8Array(fileArr[i]['data'])]);
+                var objectURL = URL.createObjectURL(blob);
+                imgArr.push(objectURL);
+            }
+        })
+    }
+
+    var newImg = `
+        <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+        <ol class="carousel-indicators">`
+        var indicator = "";
+        for (var i = 0; i < imgArr.length; i++) {
+            indicator = indicator + `<li data-target="#carouselExampleIndicators" data-slide-to="${i}" class="${i == 0 ? "active" : ""}"></li>`
+        }
+        newImg = newImg + indicator + `</ol>
+        <div class="carousel-inner">
+        `
+        var imgs = "";
+        for (var i = 0; i < imgArr.length; i++) {
+            imgs = imgs + ` <div  class="${i == 0 ? "active carousel-item" : "carousel-item"}">
+            <img class="d-block imgStyles"  src="${imgArr[i]}" alt="First slide">
+          </div>`
+        }
+        newImg = newImg + imgs;
+        newImg = newImg + `</div>
+        <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="sr-only">Previous</span>
+        </a>
+        <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="sr-only">Next</span>
+        </a>
+      </div>
+        `
+        document.getElementById('carasolImgs').innerHTML = newImg;
+        $('.carousel').carousel({
+            interval: 2000
+        });
+        // window.scroll({
+        //     top: 0,
+        //     left: 0,
+        //     behavior: 'smooth'
+        // });
+        var address = SpecificProduct['Address_Line_1'] + " " + SpecificProduct['Address_Line_2'] + " " + SpecificProduct['Address_Line_3'] + " " + SpecificProduct['Locality'];
+        document.getElementById('propertyName').innerHTML = " " + SpecificProduct['Product_Name'];
+        document.getElementById('propertyAmt').innerHTML = "$ " + SpecificProduct['Total_Cost_Estimate_including_tax_and_registration'];
+        document.getElementById('bedrooms').innerHTML = " " + SpecificProduct['Number_of_Bedrooms'];
+        document.getElementById('bathrooms').innerHTML = " " + SpecificProduct['Number_of_Bathrooms'];
+        document.getElementById('propertyStatus').innerHTML = " " + SpecificProduct['Property_Status'];
+        document.getElementById('sqrFt').innerHTML = " " + SpecificProduct['Land_Plot_Size_in_Sqft'];
+        document.getElementById('address').innerHTML = " " + address;
+        bedrooms = SpecificProduct['Number_of_Bedrooms'];
+        bathrooms = SpecificProduct['Number_of_Bathrooms'];
+        clicking('Overview');
+}
 
 function onLoader() {
     document.getElementById('loadings').style.display = 'block';
@@ -376,7 +442,7 @@ function clicking(moduleName) {
         document.getElementById('commonDiv').innerHTML = row;
     } else if (moduleName == 'SimilarHomes') {
         $('.carousel').carousel({
-            interval: 2000
+            interval: 5000
         });
         var newImg = `
         <div id="carouselExampleIndicatorss" class="carousel slide" data-ride="carousel">
@@ -426,7 +492,7 @@ function clicking(moduleName) {
       </div>
         `
         $('.carousel').carousel({
-            interval: 2000
+            interval: 5000
         });
         document.getElementById('commonDiv').innerHTML = newImg;
 
