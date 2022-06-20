@@ -6,48 +6,83 @@ var entity;
 var selectedProperty;
 var getAttachments;
 var propertyIdVal;
-function getRelatedPropertyDetails() {
+var currentRecords;
+
+async function getRelatedPropertyDetails() {
     console.log(pageloadInfo.pageLoadData);
     disableAll();
     onLoader();
     CurrentDealId = pageloadInfo.pageLoadData.EntityId[0];
     entity = pageloadInfo.pageLoadData.Entity;
-    ZOHO.CRM.API.getRecord({ Entity: entity, RecordID: CurrentDealId })
+  await  ZOHO.CRM.API.getRecord({ Entity: entity, RecordID: CurrentDealId })
         .then(function (data) {
             console.log(data);
+            currentRecords = data.data[0];
         });
 
-    ZOHO.CRM.API.getRelatedRecords({ Entity: entity, RecordID: CurrentDealId, RelatedList: "Products", page: 1, per_page: 200 })
+   ZOHO.CRM.API.getRelatedRecords({ Entity: entity, RecordID: CurrentDealId, RelatedList: "Products", page: 1, per_page: 200 })
         .then(function (data) {
             console.log(data.data);
             relatedProperties = data.data;
-            var count = 0; var propArr = [];
-            relatedProperties.forEach(element => {
-                if (element['Property_Status'] == 'Sold Out') {
-                    count++;
-                    propArr.push(element['id']);
-                }
-            });
-            console.log(count);
-            if (count == 0) {
-                enableHome();
-                dynamicTable(relatedProperties);
-            } else if (count > 0) {
-                console.log("adasd");
-                document.getElementById('homepropertyId').innerHTML = propArr.join();
-                ZOHO.CRM.API.getRecord({ Entity: "Products", RecordID: propArr.join() })
-                    .then(function (data) {
-                        console.log(data);
-                        selectedProperty = data.data[0];
+            if (relatedProperties != undefined) {
+                var count = 0; var propArr = [];
+                relatedProperties.forEach(element => {
+                    if (element['Property_Status'] == 'Sold Out') {
+                        count++;
+                        propArr.push(element['id']);
+                    }
+                });
+                console.log(count);
+                if (count == 0) {
+                    enableHome();
+                    dynamicTable(relatedProperties);
+                } else if (count > 0) {
+                    console.log("adasd");
+                    document.getElementById('homepropertyId').innerHTML = propArr.join();
+                    ZOHO.CRM.API.getRecord({ Entity: "Products", RecordID: propArr.join() })
+                        .then(function (data) {
+                            console.log(data);
+                            selectedProperty = data.data[0];
 
-                        ZOHO.CRM.API.getRelatedRecords({ Entity: "Products", RecordID: selectedProperty['id'], RelatedList: "Attachments", page: 1, per_page: 200 })
-                            .then(function (data) {
-                                console.log(data);
-                                getAttachments = data.data;
-                                enableSuccessInfo();
-                                successDisplay();
-                            });
+                            ZOHO.CRM.API.getRelatedRecords({ Entity: "Products", RecordID: selectedProperty['id'], RelatedList: "Attachments", page: 1, per_page: 200 })
+                                .then(function (data) {
+                                    console.log(data);
+                                    getAttachments = data.data;
+                                    enableSuccessInfo();
+                                    successDisplay();
+                                });
+                        })
+                }
+            } else if (relatedProperties == undefined) {
+
+                if (currentRecords['Saved_Properties_Searches'].length == 0) {
+                    offLoader();
+                    enableNoProperty();
+                } else {
+                    var promis = []; relatedProperties = [];
+                    for (var i = 0; i < currentRecords['Saved_Properties_Searches'].length; i++) {
+                        if(currentRecords['Saved_Properties_Searches'][i]['Properties'] != null){
+                            const id = currentRecords['Saved_Properties_Searches'][i]['Properties']['id'];
+                            promis.push(ZOHO.CRM.API.getRecord({ Entity: "Products", RecordID: id })
+                                .then(function (data) {
+                                    console.log(data.data[0]);
+                                    relatedProperties.push(data.data[0]);
+                                }));
+                        }
+                    }
+
+                    Promise.all(promis).then(Data => {
+                        if(relatedProperties.length == 0){
+                            offLoader();
+                            enableNoProperty();
+                        }else {
+                            enableHome();
+                            dynamicTable(relatedProperties);
+                        }
+                        
                     })
+
+                }
             }
         })
 }
@@ -57,6 +92,16 @@ function enableHome() {
     document.getElementById('propertyInfo').style.display = "none";
     document.getElementById('successInfo').style.display = "none";
     document.getElementById('homeEsign').style.display = "none";
+    document.getElementById('noProperty').style.display = "none";
+
+}
+
+function enableNoProperty() {
+    document.getElementById('home').style.display = "none";
+    document.getElementById('propertyInfo').style.display = "none";
+    document.getElementById('successInfo').style.display = "none";
+    document.getElementById('homeEsign').style.display = "none";
+    document.getElementById('noProperty').style.display = "block";
 
 }
 
@@ -65,6 +110,8 @@ function enablePropertyInfo() {
     document.getElementById('propertyInfo').style.display = "block";
     document.getElementById('successInfo').style.display = "none";
     document.getElementById('homeEsign').style.display = "none";
+    document.getElementById('noProperty').style.display = "none";
+
 }
 
 function enableSuccessInfo() {
@@ -72,6 +119,8 @@ function enableSuccessInfo() {
     document.getElementById('propertyInfo').style.display = "none";
     document.getElementById('successInfo').style.display = "block";
     document.getElementById('homeEsign').style.display = "none";
+    document.getElementById('noProperty').style.display = "none";
+
 }
 
 function disableAll() {
@@ -79,6 +128,8 @@ function disableAll() {
     document.getElementById('propertyInfo').style.display = "none";
     document.getElementById('successInfo').style.display = "none";
     document.getElementById('homeEsign').style.display = "none";
+    document.getElementById('noProperty').style.display = "none";
+
 }
 
 function enableHomeEsign() {
@@ -86,6 +137,8 @@ function enableHomeEsign() {
     document.getElementById('propertyInfo').style.display = "none";
     document.getElementById('successInfo').style.display = "none";
     document.getElementById('homeEsign').style.display = "block";
+    document.getElementById('noProperty').style.display = "none";
+
 }
 
 function here() {
@@ -110,10 +163,10 @@ async function dynamicTable(defaultProperties) {
 
     var downtable = document.getElementById('propertiesBody');
     var body = '';
-  var imgUrls = '';
+    var imgUrls = '';
     if (defaultProperties != undefined) {
         for (var i = 0; i < defaultProperties.length; i++) {
-            imgUrls = await getSpecificAttachmentImage(defaultProperties[i]['id']);
+            imgUrls = await getSpecificAttachmentImage(defaultProperties[i]['id'], i);
             body = body + `<tr> 
            <td><input type='checkbox' class='form-check-input' style="margin-top: 1.7rem;" id=${i}></td> 
            <td>${defaultProperties[i]['Product_Name']}</td>
@@ -133,13 +186,17 @@ async function dynamicTable(defaultProperties) {
     }
 }
 
-async function getSpecificAttachmentImage(id) {
+async function getSpecificAttachmentImage(id, index) {
     var PreviewImgUrl;
     await ZOHO.CRM.API.getRelatedRecords({ Entity: "Products", RecordID: id, RelatedList: "Attachments", page: 1, per_page: 200 })
         .then(function (data) {
             console.log(data.data);
             var getAttachments = data.data;
-            PreviewImgUrl = URLs + getAttachments[0]['$previewUrl'];
+            if (getAttachments.length > index) {
+                PreviewImgUrl = URLs + getAttachments[index]['$previewUrl'];
+            } else {
+                PreviewImgUrl = URLs + getAttachments[0]['$previewUrl'];
+            }
         });
     console.log(PreviewImgUrl);
     return PreviewImgUrl;
@@ -265,26 +322,26 @@ function confirmDeal() {
     //     .then(function (data) {
     //         console.log(data.data);
     //         if (data.data[0]['code'] == 'SUCCESS') {
-                var configs = {
-                    Entity: 'Products',
-                    APIData: {
-                        "id": selectedProperty['id'],
-                        "Product_Active": false,
-                        "Property_Status": "Sold Out"
-                    },
-                    Trigger: ["workflow"]
-                }
-                ZOHO.CRM.API.updateRecord(configs)
-                    .then(function (data) {
-                        console.log(data.data);
-                        if (data.data[0]['code'] == 'SUCCESS') {
-                            enableSuccessInfo();
-                            offLoader();
-                            successDisplay();
-                        }
-                    });
-            // }
-        // })
+    var configs = {
+        Entity: 'Products',
+        APIData: {
+            "id": selectedProperty['id'],
+            "Product_Active": false,
+            "Property_Status": "Sold Out"
+        },
+        Trigger: ["workflow"]
+    }
+    ZOHO.CRM.API.updateRecord(configs)
+        .then(function (data) {
+            console.log(data.data);
+            if (data.data[0]['code'] == 'SUCCESS') {
+                enableSuccessInfo();
+                offLoader();
+                successDisplay();
+            }
+        });
+    // }
+    // })
 }
 
 function successDisplay() {
@@ -320,11 +377,17 @@ function numberWithCommas(x) {
 
 function onLoader() {
     document.getElementById('loadings').style.display = 'block';
+    document.getElementById('home').style.display = '0.4';
+    document.getElementById('propertyInfo').style.display = '0.4';
+
 }
 
 
 function offLoader() {
     document.getElementById('loadings').style.display = 'none';
+    document.getElementById('home').style.display = '1';
+    document.getElementById('propertyInfo').style.display = '1';
+
 }
 
 function openAlert(msgTobeDisplayed) {

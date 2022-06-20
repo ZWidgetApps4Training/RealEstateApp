@@ -28,6 +28,7 @@
             ZOHO.embeddedApp.on("PageLoad", function (datas) {
                 console.log("in pageload");
                 pageloadInfo.pageLoadData = datas;
+    disableAll();
                 console.log(pageloadInfo.pageLoadData);
                 getRelatedPropertyDetails();
 
@@ -41,31 +42,21 @@
 </head>
 
 <body>
+    <div id="loadings" class="centerLoader">
+        <img src="loadinggif.gif" alt="loading" style="width: 300px;height: 300px;">
+    </div>
     <div class="Container-fluid" id="home">
         <div class="notify"><span id="notifyType" style="top: 10px;
             position: relative;"></span></div>
         <div class="row" style="margin-top: 35px;">
             <div class="col-md-12 col-12 col-lg-12">
-                
                 <h4 class="textStyle">Confirm Deal</h4>
                 <p style="color: #5DADE2;text-align: center;font-weight: 700;">Select the property based on your need.
                 </p>
             </div>
         </div>
-        <!-- <div id="loadings" style="position: relative;">
-            <div class="loaderBox centerLoader">
-                <div class="loader"></div>
-                <div style="color: white;
-          font-weight: 700;
-          text-align: center;">
-                    <h4 style="margin-top: 15px;">Loading...</h4>
-                    <p>Please wait, While we process your request..</p>
-                </div>
-            </div>
-        </div> -->
-        <div id="loadings" class="centerLoader">
-            <img src="https://flevix.com/wp-content/uploads/2019/07/Bar-Preloader-1.gif" alt="loading" style="width: 300px;height: 300px;">
-        </div>
+
+ 
         <div class="row">
             <div class="col-12">
                 <table class="table table-hover table-bordered">
@@ -183,6 +174,19 @@
                 </div>
             </div>
         </div> -->
+    </div>
+
+
+    <div class="Container-fluid" id="noProperty">
+        <div class="row" >
+            <div class="col-md-12 col-12 col-lg-12">
+                <h4 class="textStyle">Confirm Deal</h4>
+               <div style="margin-top: 30%;">
+                <p style="color: #808B96;text-align: center;font-weight: 700;">No Property has been associated for the said transaction ID, Kindly add atleast one property for this transaction ID.
+                </p>
+               </div>
+            </div>
+        </div>
     </div>
 </body>
 </html>
