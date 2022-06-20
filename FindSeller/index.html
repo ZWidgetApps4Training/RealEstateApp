@@ -35,12 +35,12 @@
     </script>
 </head>
 
-<body>
+<body >
     <div class="modal fade" id="sucessUpdate" role="dialog">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" style="left: 20%;
+                    <button type="button" style="left: 10%;
                     position: relative;" class="close" onclick="closeBtn()" data-dismiss="modal">&times;</button>
                     <h4 class="modal-title" id="updateDowngrade" style="text-align: center;
                     right: 37%;
@@ -62,10 +62,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btnStyle" onclick="okay()" id="okBtn" data-dismiss="modal">Ok</button>
-                    <div class="loading-container" id="secLoader">
-                        <div class="loading"></div>
-                        <div id="loading-text"></div>
-                    </div>
+                   
                 </div>
 
             </div>
@@ -101,7 +98,9 @@
             </div>
         </div>
     </div>
-
+    <div id="loadings" class="centerLoader">
+        <img src="./image/loadinggif.gif" alt="loading" style="width: 300px;height:300px;">
+    </div>
     <div class="Container-fluid" id="container">
         <div class="notify"><span id="notifyType" style="top: 10px;
             position: relative;"></span></div>
@@ -120,9 +119,7 @@
                     </div>
             </div>
         </div>
-        <div id="loadings" class="centerLoader">
-            <img src="https://flevix.com/wp-content/uploads/2019/07/Bar-Preloader-1.gif" alt="loading" style="width: 300px;height:300px;">
-        </div>
+ 
         <div>
             <button type="button" class="btn btn-danger" data-toggle="modal" id="btnTrigger"
                 data-target="#sucessUpdate" data-backdrop="false"></button>

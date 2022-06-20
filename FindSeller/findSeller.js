@@ -22,6 +22,7 @@ var ownerId;
 var fileArr;
 var transacId;
 var createContactAndPropArr = [];
+var propLen;
 // const promise1 = [];
 // const promise2 = [];
 function getCurrentPageInfo() {
@@ -157,7 +158,7 @@ function save() {
                 "Saved_Properties_Searches": subFormArray
             }
             console.log("transactionRequest", JSON.stringify(transactionRequest));
-            ZOHO.CRM.API.insertRecord({ Entity: "Deals", APIData: transactionRequest, Trigger: ["workflow","blueprint"] }).then(function (data) {
+            ZOHO.CRM.API.insertRecord({ Entity: "Deals", APIData: transactionRequest, Trigger: ["workflow", "blueprint"] }).then(function (data) {
                 console.log(data.data);
                 var transactionId = data.data[0]['details']['id'];
                 transacId = transactionId;
@@ -174,8 +175,9 @@ function save() {
                 Promise.all(promises).then(() => {
                     offLoader();
                     console.log("last");
-                    $('#btnTrigger').click();
+
                     document.getElementById('container').style.opacity = "0.5";
+                    $('#btnTrigger').click();
                     document.getElementById('sucessAndFailureResponse').innerHTML = 'Transaction has been created and selected properties are associated against the transaction record. Click <a id="idClick" href="" onclick="here()" target="_blank">here</a> to view transaction details. ' + transactionId;
                     document.getElementById('updateDowngrade').innerHTML = 'Find Seller';
                 })
@@ -197,108 +199,108 @@ function closeAlert() {
 
 async function createContactAndProperties(property) {
     // create a contact if the propery is not present inside the propoerty module and then create a property
-    var street = property['Address_Line_1'] + " " + property['Address_Line_2'] + " " + property['Address_Line_3'];
-    var contacts = {
-        "Lead_Source": "Partner",
-        "Last_Name": JSON.parse(property['Owner'])['name'],
-        "Email": JSON.parse(property['Owner'])['email'],
-        "Contact_Type": "Seller",
-        "Preferred_Time_to_Contact": "2022-06-24T03:24:39+05:30",
-        "Seller_Contact_Type": "Individual Owner",
-        "Property_For": "Sell",
-        "Property_Type": property['Property_Type'],
-        "Number_of_Bedrooms": property['Number_of_Bedrooms'],
-        "Number_of_Bathrooms": property['Number_of_Bathrooms'],
-        "Locality": property['Locality'],
-        "Rate_per_Unit": property['Rate_Per_Sqft'],
-        "Floor_Number": property['Number_of_Floors'],
-        "Plot_Area_in_SqFt": property['Land_Plot_Size_in_Sqft'],
-        "Mailing_Street": street,
-        "Mailing_State": property['State'],
-        "Mailing_Country": property['Country'],
-        "Mailing_City": property['City'],
-        "Mailing_Zip": property['Zip'],
-        "Other_City": property['City'],
-        "Other_Country": property['Country'],
-        "Other_State": property['State'],
-        "Other_Street": street,
-        "Other_Zip": property['Zip']
+    // var street = property['Address_Line_1'] + " " + property['Address_Line_2'] + " " + property['Address_Line_3'];
+    // var contacts = {
+    //     "Lead_Source": "Partner",
+    //     "Last_Name": JSON.parse(property['Owner'])['name'],
+    //     "Email": JSON.parse(property['Owner'])['email'],
+    //     "Contact_Type": "Seller",
+    //     "Preferred_Time_to_Contact": "2022-06-24T03:24:39+05:30",
+    //     "Seller_Contact_Type": "Individual Owner",
+    //     "Property_For": "Sell",
+    //     "Property_Type": property['Property_Type'],
+    //     "Number_of_Bedrooms": property['Number_of_Bedrooms'],
+    //     "Number_of_Bathrooms": property['Number_of_Bathrooms'],
+    //     "Locality": property['Locality'],
+    //     "Rate_per_Unit": property['Rate_Per_Sqft'],
+    //     "Floor_Number": property['Number_of_Floors'],
+    //     "Plot_Area_in_SqFt": property['Land_Plot_Size_in_Sqft'],
+    //     "Mailing_Street": street,
+    //     "Mailing_State": property['State'],
+    //     "Mailing_Country": property['Country'],
+    //     "Mailing_City": property['City'],
+    //     "Mailing_Zip": property['Zip'],
+    //     "Other_City": property['City'],
+    //     "Other_Country": property['Country'],
+    //     "Other_State": property['State'],
+    //     "Other_Street": street,
+    //     "Other_Zip": property['Zip']
+    // }
+    // await ZOHO.CRM.API.insertRecord({ Entity: "Contacts", APIData: contacts, Trigger: ["workflow"] }).then(async function (data) {
+    //     console.log(data.data);
+    //     if (data.data[0]['code'] == 'SUCCESS') {
+    var productRequest = {
+        Seller_Name: "4507311000000140793",
+        Product_Name: property['Product_Name'],
+        Property_Type: property['Property_Type'],
+        Product_Active: property['Product_Active'],
+        Property_For: property['Property_For'],
+        Address_Line_1: property['Address_Line_1'],
+        Address_Line_2: property['Address_Line_2'],
+        Address_Line_3: property['Address_Line_3'],
+        Property_Status: "Open For Sales",
+        City: property['City'],
+        Locality: property['Locality'],
+        Country: property['Country'],
+        State: property['State'],
+        Zip: property['Zip'],
+        Number_of_Bathrooms: property['Number_of_Bathrooms'],
+        Number_of_Bedrooms: property['Number_of_Bedrooms'],
+        Year_Built: property['Year_Built'],
+        Property_Condition: property['Property_Condition'],
+        Rate_Per_Sqft: property['Rate_Per_Sqft'],
+        Number_of_Floors: property['Number_of_Floors'],
+        Land_Plot_Size_in_Sqft: property['Land_Plot_Size_in_Sqft'],
+        Latitude: property['Latitude'],
+        Longitude: property['Longitude'],
     }
-    await ZOHO.CRM.API.insertRecord({ Entity: "Contacts", APIData: contacts, Trigger: ["workflow"] }).then(async function (data) {
-        console.log(data.data);
+    await ZOHO.CRM.API.insertRecord({ Entity: "Products", APIData: productRequest, Trigger: ["workflow"] }).then(async function (data) {
+        console.log(data);
         if (data.data[0]['code'] == 'SUCCESS') {
-            var productRequest = {
-                Seller_Name: data.data[0]['details']['id'],
-                Product_Name: property['Product_Name'],
-                Property_Type: property['Property_Type'],
-                Product_Active: property['Product_Active'],
-                Property_For: property['Property_For'],
-                Address_Line_1: property['Address_Line_1'],
-                Address_Line_2: property['Address_Line_2'],
-                Address_Line_3: property['Address_Line_3'],
-                Property_Status: "Open For Sales",
-                City: property['City'],
-                Locality: property['Locality'],
-                Country: property['Country'],
-                State: property['State'],
-                Zip: property['Zip'],
-                Number_of_Bathrooms: property['Number_of_Bathrooms'],
-                Number_of_Bedrooms: property['Number_of_Bedrooms'],
-                Year_Built: property['Year_Built'],
-                Property_Condition: property['Property_Condition'],
-                Rate_Per_Sqft: property['Rate_Per_Sqft'],
-                Number_of_Floors: property['Number_of_Floors'],
-                Land_Plot_Size_in_Sqft: property['Land_Plot_Size_in_Sqft'],
-                Latitude: property['Latitude'],
-                Longitude: property['Longitude'],
-            }
-            await ZOHO.CRM.API.insertRecord({ Entity: "Products", APIData: productRequest, Trigger: ["workflow"] }).then(async function (data) {
-                console.log(data);
-                if (data.data[0]['code'] == 'SUCCESS') {
-                    
-                    var config = {
-                        Entity: "Products",
-                        APIData: {
-                            "id": data.data[0]['details']['id'],
-                             Product_Code: "Zylker_"+data.data[0]['details']['id']
-                        },
-                        Trigger: ["workflow"]
-                    }
-                   await ZOHO.CRM.API.updateRecord(config)
-                        .then(function (data) {
-                            console.log(data)
-                        })
-                    savedProperty.push(data.data[0]['details']['id']);
 
-                    var imgId = property['imageFolderId'];
-                    await fetch("https://therealestate-710385233.development.catalystserverless.com/server/therealestate/getImagesUsingFolderId/" + imgId).then(data => {
-                        return data.json();
-                    }).then(res => {
-                        fileArr = [];
-                        fileArr = res;
-                        for (var i = 0; i < fileArr.length; i++) {
-                            var filename;
-                            var blob = new Blob([new Uint8Array(fileArr[i]['data'])]);
-                            console.log(blob);
-                            filename = "File_" + i + ".jpeg";
-                            ZOHO.CRM.API.attachFile({
-                                Entity: "Products",
-                                RecordID: data.data[0]['details']['id'],
-                                File: {
-                                    Name: filename,
-                                    Content: blob
-                                }
-                            }).then(function (result) {
-                                console.log("Gowtham!");
-                                console.log(result);
-                            });
+            var config = {
+                Entity: "Products",
+                APIData: {
+                    "id": data.data[0]['details']['id'],
+                    Product_Code: "Zylker_" + data.data[0]['details']['id']
+                },
+                Trigger: ["workflow"]
+            }
+            await ZOHO.CRM.API.updateRecord(config)
+                .then(function (data) {
+                    console.log(data)
+                })
+            savedProperty.push(data.data[0]['details']['id']);
+
+            var imgId = property['imageFolderId'];
+            fetch("https://therealestate-710385233.development.catalystserverless.com/server/therealestate/getImagesUsingFolderId/" + imgId).then(data => {
+                return data.json();
+            }).then(res => {
+                fileArr = [];
+                fileArr = res;
+                for (var i = 0; i < fileArr.length; i++) {
+                    var filename;
+                    var blob = new Blob([new Uint8Array(fileArr[i]['data'])]);
+                    console.log(blob);
+                    filename = "File_" + i + ".jpeg";
+                    ZOHO.CRM.API.attachFile({
+                        Entity: "Products",
+                        RecordID: data.data[0]['details']['id'],
+                        File: {
+                            Name: filename,
+                            Content: blob
                         }
+                    }).then(function (result) {
+                        console.log("Gowtham!");
+                        console.log(result);
                     });
                 }
-                console.log(savedProperty);
             });
         }
+        console.log(savedProperty);
     });
+    // }
+    // });
 }
 
 function saveBtn() {
@@ -393,7 +395,8 @@ function search() {
                     document.getElementById('noPropertyMatch').style.display = "block";
                     offLoader();
                 } else {
-                    dynamicTable(defaultProperties);
+                    propLen = defaultProperties.length;
+                    dynamicTable(defaultProperties,'search');
                     document.getElementById('noPropertyMatch').style.display = "none";
                 }
             }
@@ -402,6 +405,11 @@ function search() {
 
 function tryInZillow() {
     onLoader();
+    window.scroll({
+        top: 0,
+        left: 0,
+        behavior: 'smooth'
+    });
     fetch("https://therealestate-710385233.development.catalystserverless.com/server/therealestate/getlistOfProperties").then(response => {
         return response.json();
     }).then(data1 => {
@@ -430,6 +438,7 @@ function tryInZillow() {
         }
         console.log(arr);
         console.log(zillowProperties);
+
         zillowProperties.forEach(element => {
             var bool = true;
             for (var i = 0; i < arr.length; i++) {
@@ -445,9 +454,8 @@ function tryInZillow() {
                 defaultProperties.push(element);
             }
         });
-        offLoader();
         if (defaultProperties != undefined) {
-            dynamicTable(defaultProperties);
+            dynamicTable(defaultProperties,'zylker');
         } else {
             document.getElementById('noPropertyMatch').style.display = "none";
         }
@@ -475,14 +483,16 @@ function getInfoFromProperty() {
 
 function onLoader() {
     document.getElementById('loadings').style.display = 'block';
-}
+    document.getElementById('container').style.opacity = '0.2';
 
+}
 
 function offLoader() {
     document.getElementById('loadings').style.display = 'none';
+    document.getElementById('container').style.opacity = '1';
 }
 
-async function dynamicTable(defaultProperties) {
+async function dynamicTable(defaultProperties,module) {
     var downhead = document.getElementById('propertiesHead');
     var row = `<tr> <th></th>
        <th>Property Name</th>
@@ -499,10 +509,10 @@ async function dynamicTable(defaultProperties) {
     var imgUrls = '';
     if (defaultProperties != undefined) {
         for (var i = 0; i < defaultProperties.length; i++) {
-            if(defaultProperties[i]['id'] != undefined){
-                imgUrls = await getSpecificAttachmentImage(defaultProperties[i]['id']);
+            if (defaultProperties[i]['id'] != undefined) {
+                imgUrls = await getSpecificAttachmentImage(defaultProperties[i]['id'], i);
             }
-            body = body + `<tr> 
+            body = body + `<tr id=${"tr"+i}> 
            <td><input type='checkbox' class='form-check-input' style="margin-top: 1.7rem;" id=${i}></td> 
            <td ><a style="cursor: pointer;color: #007bff !important;" onclick="getSpecificDetailInfo(${i});"> ${defaultProperties[i]['Product_Name'] != null ? defaultProperties[i]['Product_Name'] : defaultProperties[i]['Product_Name']} </a> </td>
            <td>
@@ -518,7 +528,17 @@ async function dynamicTable(defaultProperties) {
         }
         offLoader();
         downtable.innerHTML = body;
+        console.log("before len "+propLen);
+        var newDefProp = defaultProperties.length;
+        console.log("after len "+newDefProp);
+        if(module == 'zylker'){
+            for (var i = propLen; i < newDefProp; i++) {
+                var ids =  "tr"+i;
+                document.getElementById(ids).style.backgroundColor = "rgb(214, 234, 248)";
+            }
+        }
     }
+
 }
 
 function closing() {
@@ -680,13 +700,18 @@ function numberWithCommas(x) {
     return x.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
 }
 
-async function getSpecificAttachmentImage(id) {
+async function getSpecificAttachmentImage(id, index) {
     var PreviewImgUrl;
     await ZOHO.CRM.API.getRelatedRecords({ Entity: "Products", RecordID: id, RelatedList: "Attachments", page: 1, per_page: 200 })
         .then(function (data) {
             console.log(data.data);
             var getAttachments = data.data;
-            PreviewImgUrl = URLs + getAttachments[0]['$previewUrl'];
+            if (getAttachments.length > index) {
+                PreviewImgUrl = URLs + getAttachments[index]['$previewUrl'];
+            } else {
+                PreviewImgUrl = URLs + getAttachments[0]['$previewUrl'];
+            }
+
         });
     console.log(PreviewImgUrl);
     return PreviewImgUrl;
